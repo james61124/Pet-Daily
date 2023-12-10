@@ -1,0 +1,83 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:10-jammy
+    container_name: ${MARIADB_HOSTNAME}
+    restart: always
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    ports:
+      - ${MARIADB_PORT}:${MARIADB_PORT}
+    volumes:
+      # - ./mariadb/data:/var/lib/mariadb
+      # - ./mariadb/conf:/etc/mariadb/conf.d
+      - ./mariadb/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -P ${MARIADB_PORT} -u${MARIADB_USER} -p${MARIADB_PASSWORD} | grep 'mysqld is alive' || exit 1"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+    networks:
+      - dog-journal-net
+
+  python-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${PYTHON_SERVER_HOST}
+    # restart: always
+    tty: true
+    ports: 
+      - ${PYTHON_SERVER_PORT}:${PYTHON_SERVER_PORT}
+    env_file:
+      - ./app.env
+    volumes:
+      # - ./api/logs:/app/logs
+      - ./home-python:/home
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - dog-journal-net
+  
+  go-server:
+    build:
+      context: .
+      dockerfile: Dockerfile2
+    container_name: ${GO_SERVER_HOST}
+    # restart: always
+    tty: true
+    ports: 
+      - ${GO_SERVER_PORT}:${GO_SERVER_PORT}
+    env_file:
+      - ./app.env
+    volumes:
+      # - ./api/logs:/app/logs
+      - ./home-go:/home
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - dog-journal-net
+  
+  Nginx:
+    image: nginx:latest
+    container_name: ${NGINX_HOSTNAME}
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      python-server:
+        condition: service_started
+    networks:
+      - dog-journal-net
+
+networks:
+  dog-journal-net:
+    driver: bridge
