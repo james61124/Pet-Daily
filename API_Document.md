@@ -48,7 +48,7 @@
 # API
 ## login page：
 ### /User/Register *POST*
-**request**\
+**request**
 ```
 data:
 {
@@ -61,7 +61,7 @@ data:
 }
 ```
 
-**response**\
+**response**
 ```
 data:
 {
@@ -73,14 +73,14 @@ data:
 ### /User/Login *POST* 
 **request** 
 ```
-data:\
-{\
-	“username” : “”\
-	“password” : “”\
-}\
+data:
+{
+	“username” : “”,
+	“password” : “”,
+}
 ```
 
-**response**\
+**response**
 
 
 ### /Diary/GetDressPageInfo *POST*
