@@ -99,7 +99,7 @@ data:
 }
 
 
-/User/AddPet POST
+/User/AddPet  POST
 request
 data:
 {
