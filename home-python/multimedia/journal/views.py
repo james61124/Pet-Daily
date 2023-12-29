@@ -251,7 +251,7 @@ def get_history_info(request): if request.method == "POST": userid = request.POS
             cursor.execute("SELECT date FROM Diary WHERE petid = %s", [petid])
             dates = cursor.fetchall()
 
-        # return the history information as a JSON object
+        # return the history information as a JSON object #
         history_info = {
             'dates': [date[0] for date in dates]
         }
