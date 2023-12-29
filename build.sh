@@ -1,2 +1,2 @@
-sudo docker compose --env-file app.env down
-sudo docker compose --env-file app.env up -d
+docker compose --env-file app.env down
+docker compose --env-file app.env up -d
