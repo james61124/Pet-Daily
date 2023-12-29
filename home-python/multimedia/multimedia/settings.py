@@ -139,7 +139,7 @@ JWT_AUTH = {
 
 IMAGE_ROOT = '/home/multimedia/journal/image'
 IMAGE_URL = '/image/'
-
+#
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
