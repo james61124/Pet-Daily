@@ -40,6 +40,11 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
     networks:
       - dog-journal-net
   
@@ -75,6 +80,11 @@ services:
         condition: service_healthy
       python-server:
         condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
     networks:
       - dog-journal-net
 
