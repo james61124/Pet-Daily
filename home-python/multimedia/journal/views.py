@@ -72,11 +72,60 @@ def Weight(request):
     else:
         return HttpResponseBadRequest()
 
+### Dress Up ###
+def GetDressPageInfo(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        userID = data.get('userID')
+        petID = data.get('petID')
+
+        dress_up_product_list = []
+        money = 0
+        
+        # get user money
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
+            money = cursor.fetchone()
+
+        # get which product user has and where it puts
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s", [userID])
+            user_product = cursor.fetchone()
+        
+        for productid, description, posX, posY in user_product:
+            query = f"SELECT image FROM Product WHERE productid = %s"
+            product_image = ""
+            with connection.cursor() as cursor:
+                cursor.execute(query, [productid])
+                product_image = cursor.fetchone()
+
+            dress_up_product = {
+                "Image": product_image,
+                "posX": posX,
+                "posY": posY
+            }
+
+            dress_up_product_list.append(dress_up_product)
+        
+        response_data = {
+            "money": money,
+            "DressUpProduct": dress_up_product_list
+        }
+
+        return HttpResponse(response_data)
+
+    else:
+        return HttpResponseBadRequest()
+
+
 ### Login Page ### 
 def login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
 
         # check if user exsits or password is incorrect
         with connection.cursor() as cursor:
@@ -92,8 +141,20 @@ def login(request):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        breed = data.get('breed')
+        petName = data.get('petName')
+        age = data.get('age')
+        gender = data.get('gender')
+
+        credentials = f"{username}_{password}"
+        pet_credentials = f"{username}_{petName}"
+        userID = credentials
+        petid = pet_credentials
+        money = 1000
 
         # check if username exists
         with connection.cursor() as cursor:
@@ -106,22 +167,29 @@ def register(request):
         # check password is null
         if not password:
             return HttpResponseBadRequest("Password is null!")
-
+        
+        # check petName is null
+        if not petName:
+            return HttpResponseBadRequest("petName is null!")
+        
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO User (username, password) VALUES (%s, %s)", [username, password])
+            cursor.execute("INSERT INTO User (userid, username, password, money) VALUES (%s, %s, %s, %s)", [userID, username, password, money])
+            cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age) VALUES (%s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age])
+        
+        response_data = {
+            "userID" : userID,
+            "petID" : petid
+        }
 
-        # generate JWT token ( temporaily skip )
+        response_data = json.dumps(response_data)
 
-        # data = {'username': username}
-        # jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-        # jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-        # payload = jwt_payload_handler(data)
-        # token = jwt_encode_handler(payload)
-
-        token = username
-        return HttpResponse(f"Register successful! JWT Token: {token}")
+        return HttpResponse(response_data)
     else:
         return HttpResponseBadRequest()
+
+
+
+#################################################################################################
 
 def get_all_user(request):
     if request.method == 'GET':

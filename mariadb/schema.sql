@@ -11,11 +11,41 @@ USE djangoDB;
 -- FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS User (
-	Username varchar(36) PRIMARY KEY, 
-	Password varchar(60) NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid VARCHAR(36) NOT NULL,
+    username VARCHAR(36) NOT NULL,
+    password VARCHAR(60) NOT NULL,
+    money DECIMAL(5, 0) DEFAULT 1000 NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Pet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid VARCHAR(60) NOT NULL,
+    petid VARCHAR(60) NOT NULL,
+    name VARCHAR(36),
+    breed VARCHAR(10),
+    gender VARCHAR(10),
+    age DECIMAL(3, 0),
+    weight DECIMAL(5, 1)
+);
 
+CREATE TABLE IF NOT EXISTS UserProduct (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid VARCHAR(60) NOT NULL,
+    productid VARCHAR(60) NOT NULL,
+    description VARCHAR(10) NOT NULL,
+    posX DECIMAL(4, 0) NOT NULL,
+    posY DECIMAL(4, 0) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Product (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    productid VARCHAR(60) NOT NULL,
+    name VARCHAR(36) NOT NULL,
+    price DECIMAL(5, 0) NOT NULL,
+    image VARCHAR(100) NOT NULL,
+    product_type VARCHAR(10) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS IotWeight (
     id SERIAL PRIMARY KEY,

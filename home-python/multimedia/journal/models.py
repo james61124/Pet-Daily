@@ -6,7 +6,7 @@ class User(models.Model):
     userid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=36)
     password = models.CharField(max_length=60)
-    money = models.DecimalField(max_digits = 5, decimal_places= 0, default=0)
+    money = models.DecimalField(max_digits = 5, decimal_places= 0, default=1000)
 
 class UserProduct(models.Model):
     userid = models.CharField(max_length=60)
@@ -36,7 +36,7 @@ class Product(models.Model):
     productid =  models.CharField(max_length=60)
     name =  models.CharField(max_length=36)
     price = models.DecimalField(max_digits = 5, decimal_places= 0)
-    image = models.ImageField(upload_to='uploads/products')
+    image = models.CharField(max_length=100)
     product_type = models.CharField(max_length=10, choices=ProductType.choices)
 
 class Diary(models.Model):
