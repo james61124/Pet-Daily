@@ -1,30 +1,72 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from rest_framework_jwt.settings import api_settings
-from .models import User, UserProduct, Pet, Product, Diary # add more data
+from .models import User, UserProduct, Pet, Product, Diary, IotWaterIntake # add more data
 from django.db import connection
+from datetime import datetime
 
 import base64 
 import io 
 
+### Iot
+def FoodIntake(request):
+    if request.method == 'POST':
 
+        FoodIntake = request.POST.get('FoodIntake')
+        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-### Login Page ### 
-
-def submit(request):
-    if request.method == 'GET':
-
-        # check if JWT is correct ( temporaily skip )
-        # response = obtain_jwt_token(request)
-        # if response.status_code == 200:
-        #     return HttpResponse("Submit successful!")
-        # else:
-        #     return HttpResponseBadRequest("token failed !")
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO IotFoodIntake (date, food_intake) VALUES (%s, %s)", [current_date, FoodIntake])
         
-        return HttpResponse("Submit successful!")
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, food_intake FROM IotFoodIntake")
+            total_food_intake = cursor.fetchall()
+
+        total_food_intake_list = [(date, food_intake) for date, food_intake in total_food_intake]
+
+        return HttpResponse(f"IotFoodIntake insert successful! Here's all the food_intake: {total_food_intake_list}")
     else:
         return HttpResponseBadRequest()
 
+def WaterIntake(request):
+    if request.method == 'POST':
+        water_intake = request.POST.get('WaterIntake')
+        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO IotWaterIntake (date, water_intake) VALUES (%s, %s)", [current_date, water_intake])
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
+            total_water_intake = cursor.fetchall()
+        
+        total_water_intake_list = [(date, water_intake) for date, water_intake in total_water_intake]
+
+        return HttpResponse(f"IotWaterIntake insert successful! Here's all the water_intake: {total_water_intake_list}")
+
+    else:
+        return HttpResponseBadRequest()
+
+def Weight(request):
+    if request.method == 'POST':
+        weight = request.POST.get('Weight')
+        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO IotWeight (date, weight) VALUES (%s, %s)", [current_date, weight])
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, weight FROM IotWeight")
+            total_weight = cursor.fetchall()
+        
+        total_weight_list = [(date, weight) for date, weight in total_weight]
+
+        return HttpResponse(f"IotWeight insert successful! Here's all the weight: {total_weight_list}")
+
+    else:
+        return HttpResponseBadRequest()
+
+### Login Page ### 
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -177,9 +219,12 @@ def get_history(request):
 
 #get the pet information for a user
 def get_pet_info(request): 
+
     if request.method == "POST": 
         userid = request.POST.get("userid") 
         petid = request.POST.get("petid")
+    else:
+        return HttpResponseBadRequest("Invalid request method")
 
     # check if the user and pet exist
     with connection.cursor() as cursor:
@@ -209,11 +254,16 @@ def get_pet_info(request):
         return HttpResponse(json.dumps(pet_info))
     else:
         return HttpResponseBadRequest("User or pet not found.")
-else:
-    return HttpResponseBadRequest("Invalid request method")
+
 
 # get the user information for a user
-def get_user_info(request): if request.method == "POST": userid = request.POST.get("userid")
+def get_user_info(request): 
+
+    if request.method == "POST": 
+        userid = request.POST.get("userid")
+    else:
+        return HttpResponseBadRequest("Invalid request method")
+
     # check if the user exists
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM User WHERE userid = %s", [userid])
@@ -232,11 +282,15 @@ def get_user_info(request): if request.method == "POST": userid = request.POST.g
         return HttpResponse(json.dumps(user_info))
     else:
         return HttpResponseBadRequest("User not found.")
-else:
-    return HttpResponseBadRequest("Invalid request method")
+
 
 # get the history information for a user and a pet
-def get_history_info(request): if request.method == "POST": userid = request.POST.get("userid") petid = request.POST.get("petid")
+def get_history_info(request): 
+    if request.method == "POST": 
+        userid = request.POST.get("userid") 
+        petid = request.POST.get("petid")
+    else:
+        return HttpResponseBadRequest("Invalid request method")
 
     # check if the user and pet exist
     with connection.cursor() as cursor:
@@ -258,5 +312,3 @@ def get_history_info(request): if request.method == "POST": userid = request.POS
         return HttpResponse(json.dumps(history_info))
     else:
         return HttpResponseBadRequest("User or pet not found.")
-else:
-    return HttpResponseBadRequest("Invalid request method")

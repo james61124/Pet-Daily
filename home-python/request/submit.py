@@ -1,8 +1,17 @@
 import requests
 
-url = "http://localhost:81/submit/"
+url = "http://localhost:8000/Iot/FoodIntake/"
 
-response = requests.get(url)
+data = {
+    'FoodIntake': 12
+}
 
-print("Response Content:", response.content)
-print("Status Code:", response.status_code)
+try:
+    response = requests.post(url, data=data)
+    print("Response Content:", response.content)
+    print("Status Code:", response.status_code)
+except requests.exceptions.RequestException as e:
+    print(f"Request failed: {e}")
+
+
+

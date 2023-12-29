@@ -23,7 +23,9 @@ urlpatterns = [
     path('register/', views.register),
     path('login/', views.login),
     path('get_all_user/', views.get_all_user),
-    path('delete_user/', views.delete_user),
-    path('submit/', views.submit),
+    path('delete_user/', views.delete_user), 
     
+    path('Iot/WaterIntake/', views.WaterIntake),
+    path('Iot/FoodIntake/', views.FoodIntake),
+    path('Iot/Weight/', views.Weight),
 ]

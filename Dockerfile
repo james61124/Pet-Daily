@@ -15,7 +15,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install django mysqlclient requests djangorestframework-jwt djangorestframework gunicorn
+RUN pip3 install django mysqlclient requests djangorestframework-jwt djangorestframework gunicorn Pillow
 
 RUN apt-get update \
     && apt-get install -y tmux vim git \
@@ -27,6 +27,6 @@ CMD /bin/bash
 
 WORKDIR /home/multimedia
 
-# CMD ["python3", "manage.py", "makemigrations"]
-# CMD ["python3", "manage.py", "migrate"]
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "multimedia.wsgi:application"]
+CMD ["python3", "manage.py", "makemigrations"]
+CMD ["python3", "manage.py", "migrate"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "multimedia.wsgi:application"]
