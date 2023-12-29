@@ -15,7 +15,6 @@ def FoodIntake(request):
         
         data = json.loads(request.body)
         FoodIntake = data.get('FoodIntake')
-        # FoodIntake = request.POST.get('FoodIntake')
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         with connection.cursor() as cursor:
@@ -33,7 +32,9 @@ def FoodIntake(request):
 
 def WaterIntake(request):
     if request.method == 'POST':
-        water_intake = request.POST.get('WaterIntake')
+
+        data = json.loads(request.body)
+        water_intake = data.get('WaterIntake')
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         with connection.cursor() as cursor:
@@ -52,7 +53,9 @@ def WaterIntake(request):
 
 def Weight(request):
     if request.method == 'POST':
-        weight = request.POST.get('Weight')
+
+        data = json.loads(request.body)
+        weight = data.get('Weight')
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         with connection.cursor() as cursor:
