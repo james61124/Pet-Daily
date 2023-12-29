@@ -12,6 +12,13 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+    
+    - name: Debugging Information
+      run: |
+        echo "Checking SSH connection..."
+        ssh-keyscan -t rsa 107.191.60.115 >> ~/.ssh/known_hosts
+        cat ~/.ssh/known_hosts
+        echo "SSH connection check complete."
 
     - name: SSH into Remote Server and Execute Commands
       run: |
