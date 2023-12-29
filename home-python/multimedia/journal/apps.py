@@ -12,7 +12,7 @@ class JournalConfig(AppConfig):
         directory = "/home/multimedia/journal/image/shop"
         for filename in os.listdir(directory):
             if os.path.isfile(os.path.join(directory, filename)):
-                image = "http://107.191.60.159/image/shop/" + filename
+                image = "http://107.191.60.115/image/shop/" + filename
                 productid = filename
                 name = filename
                 price = 10

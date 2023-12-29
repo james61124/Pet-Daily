@@ -83,7 +83,7 @@ data:
 **response**
 
 
-### /Diary/GetDressPageInfo *POST*
+### /Shop/GetDressPageInfo *POST*
 
 **request**
 ```
