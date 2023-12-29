@@ -49,41 +49,53 @@
 ## login page：
 ### /User/Register *POST*
 **request**\
-data: \
-{\
-	“username” : “”\
-	“password” : “”\
-	"breed" : “”\
-	"petName" : “”\
-	"age" : “”\
-	"gender" : “”\
+```
+data:
+{
+	“username” : “”,
+	“password” : “”,
+	"breed" : “”,
+	"petName" : “”,
+	"age" : “”,
+	"gender" : “”,
 }
+```
+
 **response**\
-data:\
-{\
+```
+data:
+{
 	"userID" : "",
 	"petID" : ""
 }
+```
 
-### /User/Login *POST*
-**request**\
+### /User/Login *POST* 
+**request** 
+```
 data:\
 {\
 	“username” : “”\
 	“password” : “”\
 }\
+```
+
 **response**\
 
 
 ### /Diary/GetDressPageInfo *POST*
 
-**request**\
+**request**
+```
 data:
 {
 	“userID” : "",
 	“petID” " ""
 }
-**response**\
+```
+
+**response**
+```
 data: 
 {
 	"money": "",
@@ -97,6 +109,9 @@ data:
 		"image": ""
 	}, ...]
 }
+```
+
+
 
 
 /User/AddPet  POST

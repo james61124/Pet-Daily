@@ -1,20 +1,19 @@
 import requests
+import json
 
-url = "http://localhost:81/login/"
+url = "http://107.191.60.115:81/User/Login"
 
 data = {
     'username': 'james',
     'password': 'secret'
 }
 
-jwt_token = "james"
 headers = {
-    'Authorization': f'Bearer {jwt_token}',
-    'User-Agent': 'MyApp/1.0',
-    'Content-Type': 'application/x-www-form-urlencoded',
+    "Content-Type": "application/json"
 }
 
-response = requests.post(url, headers=headers, data=data)
+data = json.dumps(data)
+response = requests.post(url, data=data, headers=headers)
 
 print("Response Content:", response.content)
 print("Status Code:", response.status_code)
