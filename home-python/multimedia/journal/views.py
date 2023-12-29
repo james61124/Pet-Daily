@@ -93,25 +93,44 @@ def GetDressPageInfo(request):
             cursor.execute("SELECT * FROM UserProduct WHERE userid = %s", [userID])
             user_product = cursor.fetchone()
         
-        for productid, description, posX, posY in user_product:
-            query = f"SELECT image FROM Product WHERE productid = %s"
-            product_image = ""
-            with connection.cursor() as cursor:
-                cursor.execute(query, [productid])
-                product_image = cursor.fetchone()
+        if user_product:
+            for productid, description, posX, posY in user_product:
+                query = f"SELECT image FROM Product WHERE productid = %s"
+                product_image = ""
+                with connection.cursor() as cursor:
+                    cursor.execute(query, [productid])
+                    product_image = cursor.fetchone()
 
-            dress_up_product = {
-                "Image": product_image,
-                "posX": posX,
-                "posY": posY
-            }
+                dress_up_product = {
+                    "Image": product_image,
+                    "posX": str(posX),
+                    "posY": str(posY)
+                }
 
-            dress_up_product_list.append(dress_up_product)
+                dress_up_product_list.append(dress_up_product)
         
+        # get shop product
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT price, image FROM Product")
+            shop_products = cursor.fetchall()
+        
+        all_shop_product = [(price, image) for price, image  in shop_products]
+        all_shop_product_list = []
+
+        for price, image in all_shop_product:
+            shop_product = {
+                "price": str(price),
+                "image": image
+            }
+            all_shop_product_list.append(shop_product)
+
         response_data = {
-            "money": money,
-            "DressUpProduct": dress_up_product_list
+            "money": str(money),
+            "DressUpProduct": dress_up_product_list,
+            "ShopProduct": all_shop_product_list
         }
+
+        response_data = json.dumps(response_data)
 
         return HttpResponse(response_data)
 

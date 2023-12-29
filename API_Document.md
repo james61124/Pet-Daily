@@ -53,12 +53,17 @@ data: \
 {\
 	“username” : “”\
 	“password” : “”\
+	"breed" : “”\
+	"petName" : “”\
+	"age" : “”\
+	"gender" : “”\
 }
 **response**\
-	data:\
-	{\
-		“description”  // Create Account success or already have account\
-	}
+data:\
+{\
+	"userID" : "",
+	"petID" : ""
+}
 
 ### /User/Login *POST*
 **request**\
@@ -67,12 +72,32 @@ data:\
 	“username” : “”\
 	“password” : “”\
 }\
-response
-	data:
-	{
-“UserID”
-	"PetID"
+**response**\
+
+
+### /Diary/GetDressPageInfo *POST*
+
+**request**\
+data:
+{
+	“userID” : "",
+	“petID” " ""
 }
+**response**\
+data: 
+{
+	"money": "",
+	"DressUpProduct": [{
+		"Image": "",
+		"posX": "",
+		"posY": ""
+	}, ...]
+	"ShopProduct": [{
+		"price": "",
+		"image": ""
+	}, ...]
+}
+
 
 /User/AddPet POST
 request
@@ -165,28 +190,7 @@ response
 }
 
 
-shop/dressup：
-/Diary/GetDressPageInfo
 
-request
-	data:
-{
-	“User ID”
-	“Pet ID”
-“Page Type”
-
-}
-response 
-	data: 
-	{
-		“DressUp Image” : “”,
-“Product” : [{
-Name
-Price
-Image		
-}, …]
-	
-}
 
 
 

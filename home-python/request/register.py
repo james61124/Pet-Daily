@@ -1,13 +1,13 @@
 import requests
 import json
 
-url = "http://localhost:8000/register/"
+url = "http://localhost:8000/User/Register"
 
 data = {
-    'username': 'peg',
-    'password': 'secret',
+    'username': 'test1',
+    'password': 'password',
     'breed': 'dog',
-    'petName': 'james_dog',
+    'petName': 'testpet',
     'age': 10,
     'gender': 'haha'
 }
