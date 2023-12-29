@@ -7,12 +7,15 @@ from datetime import datetime
 
 import base64 
 import io 
+import json
 
 ### Iot
 def FoodIntake(request):
     if request.method == 'POST':
-
-        FoodIntake = request.POST.get('FoodIntake')
+        
+        data = json.loads(request.body)
+        FoodIntake = data.get('FoodIntake')
+        # FoodIntake = request.POST.get('FoodIntake')
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         with connection.cursor() as cursor:
