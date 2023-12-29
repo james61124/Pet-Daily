@@ -26,4 +26,7 @@ USER root
 CMD /bin/bash
 
 WORKDIR /home/multimedia
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "multimedia.wsgi:application"]
+
+CMD ["python3", "manage.py", "makemigrations"]
+CMD ["python3", "manage.py", "migrate"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "multimedia.wsgi:application"]
