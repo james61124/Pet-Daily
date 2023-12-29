@@ -29,5 +29,5 @@ jobs:
 
     - name: SSH into Remote Server and Execute Commands
       run: |
-        ssh -o StrictHostKeyChecking=yes pd@107.191.60.115 'cd Pet-Daily-Backend && git pull origin master && ./build.sh'
+        ssh -o StrictHostKeyChecking=yes pd@107.191.60.115 'cd Pet-Daily-Backend && git pull origin master && chmod 777 build.sh && ./build.sh'
       shell: /usr/bin/bash -e {0}
