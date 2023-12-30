@@ -356,6 +356,21 @@ def upload_diary(request):
             abnormality = data.get('abnormality')
             medical_record = data.get('medical_record')
 
+            if weight is not None and weight.isnumeric():
+                pass
+            else:
+                weight = None
+
+            if water_intake is not None and water_intake.isnumeric():
+                pass
+            else:
+                water_intake = None
+
+            if food_intake is not None and food_intake.isnumeric():
+                pass
+            else:
+                food_intake = None
+
             query = """
                     UPDATE Diary
                     SET content = %s, place = %s, mood = %s,
