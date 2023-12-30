@@ -1,3 +1,198 @@
+# API
+## login page
+### /User/Register *POST*
+**request**
+```
+照片還沒處理
+username 不能重複
+```
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	“username” : “”,
+	“password” : “”,
+	"breed" : “”,
+	"petName" : “”,
+	"age" : “”,
+	"gender" : “”,
+}
+```
+
+**response**
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+data:
+{
+	"userID" : "",
+	"petID" : ""
+}
+```
+
+### /User/Login *POST* 
+**request** 
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	“username” : “”,
+	“password” : “”,
+}
+```
+
+**response**
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+data:
+{
+	"userID" : "",
+	"petID" : ""
+}
+```
+
+
+## dress up page
+
+### /Shop/GetDressPageInfo *POST*
+```
+這是剛進到 Dress Page 會拿到的所有資料
+Dressup Product 就是之前已經著裝過的寵物的衣服位置
+Shop Product 就是商店裡的所有商品，先給價格就好，status 還沒處理
+```
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	“userID” : "",
+	“petID” " ""
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"money": "",
+	"DressUpProduct": [{
+		"Image": "",
+		"posX": "",
+		"posY": ""
+	}, ...]
+	"ShopProduct": [{
+		"price": "",
+		"image": ""
+	}, ...]
+}
+```
+
+## diary page
+
+### /Diary/UploadImage *POST*
+```description: upload image```
+**request**
+```
+header:
+{ 
+	"content_type" : 'multipart/form-data'
+}
+data:
+{
+	“userID” : “”,
+	“petID” : “”,
+	"date" : “”
+}
+files : {
+    'image': 
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"image": image_url
+}
+```
+
+### /Diary/UploadDiary *POST*
+```
+description: upload diary at the current date
+目前 mood, abnormality 沒有擋型態，前端傳甚麼後端就存甚麼
+```
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	"petid" : ,
+	"date" : ,
+	"content" : ,
+	"place" : ,
+	"mood" : ,
+	"weight" : ,
+	"water_intake" : ,
+	"food_intake" : ,
+	"defecation" : ,
+	"abnormality" : ,
+	"medical_record" :
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"date" : ,
+	"content" : ,
+	"place" : ,
+	"mood" : ,
+	"weight" : ,
+	"water_intake" : ,
+	"food_intake" : ,
+	"defecation" : ,
+	"abnormality" : ,
+	"medical_record" :
+}
+```
+
+## main page
+
+
+
 # Database 
 ## User
 ```
@@ -75,139 +270,29 @@ class IotWeight(models.Model):
 
 
 ## Diary
-* PetID
-* Date    DATE
-* image
-* Content
-* Place
-* Mood
-* Weight
-* Water-intake
-* Food-intake
-* Defecation
-* Abnormality
-* Medical-record
-
-
-*
-# API
-## login page
-### /User/Register *POST*
-**request**
 ```
-header:
-{ 
-	"content_type" : 'application/json'
-}
-data:
-{
-	“username” : “”,
-	“password” : “”,
-	"breed" : “”,
-	"petName" : “”,
-	"age" : “”,
-	"gender" : “”,
-}
+class Diary(models.Model):
+    class Mood(models.TextChoices):
+        HAPPY = 'Happy', 'Happy'
+        CONTENT = 'Content', 'Content'
+        SAD = 'Sad', 'Sad'
+    class Defecation(models.TextChoices):
+        DIARRHEA = 'Diarrhea', 'Diarrhea'
+        NORMAL = 'Normal', 'Normal'
+        CONSTIPATION = 'Constipation', 'Constipation'
+    petid = models.CharField(max_length=60)
+    date = models.DateTimeField(auto_now=True)
+    image = models.CharField(max_length=100)
+    content = models.TextField()
+    place = models.CharField(max_length=120)
+    mood = models.CharField(max_length=10, choices=Mood.choices)
+    weight = models.DecimalField(max_digits = 6, decimal_places= 3) #kg 
+    water_intake = models.DecimalField(max_digits = 4, decimal_places= 0) #ml 
+    food_intake = models.DecimalField(max_digits = 5, decimal_places= 3) #kg
+    defecation = models.CharField(max_length=20, choices=Defecation.choices)
+    abnormality =  models.TextField()
+    medical_record =  models.TextField()
 ```
-
-**response**
-```
-data:
-{
-	"userID" : "",
-	"petID" : ""
-}
-```
-
-### /User/Login *POST* 
-**request** 
-```
-header:
-{ 
-	"content_type" : 'application/json'
-}
-data:
-{
-	“username” : “”,
-	“password” : “”,
-}
-```
-
-**response**
-
-
-## dress up page
-
-### /Shop/GetDressPageInfo *POST*
-**request**
-header:
-{ 
-	"content_type" : 'application/json'
-}
-```
-data:
-{
-	“userID” : "",
-	“petID” " ""
-}
-```
-**response**
-```
-header:
-{ 
-	"content_type" : 'application/json'
-}
-```
-```
-data: 
-{
-	"money": "",
-	"DressUpProduct": [{
-		"Image": "",
-		"posX": "",
-		"posY": ""
-	}, ...]
-	"ShopProduct": [{
-		"price": "",
-		"image": ""
-	}, ...]
-}
-```
-
-## diary page
-
-### /Diary/UploadImage *POST*
-**request**
-```
-header:
-{ 
-	"content_type" : 'multipart/form-data'
-}
-data:
-{
-	“userID” : “”,
-	“petID” : “”,
-	"date" : “”,
-	"image" : “”
-}
-```
-**response**
-```
-header:
-{ 
-	"content_type" : 'application/json'
-}
-```
-```
-data: 
-{
-	"image": image_url
-}
-```
-
-
-
-## main page
 
 
 

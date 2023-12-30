@@ -149,11 +149,38 @@ def login(request):
 
         # check if user exsits or password is incorrect
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM User WHERE username = %s AND password = %s", [username, password])
+            cursor.execute("SELECT userid FROM User WHERE username = %s AND password = %s", [username, password])
             user_data = cursor.fetchone()
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
+            pet_data = cursor.fetchone()
+        
+        all_user_data = [userid for userid in user_data]
+        UserID = 0
+        for userid in all_user_data:
+            UserID = userid
+        
+        all_pet_data = [petid for petid in pet_data]
+        petID = 0
+        for petid in all_pet_data:
+            petID = petid
 
         if user_data:
-            return HttpResponse("Login successful!")
+            if pet_data:
+                response_data = {
+                    "userID" : UserID,
+                    "petID" : petID 
+                }
+                response_data = json.dumps(response_data)
+                return HttpResponse(response_data)
+            else:
+                response_data = {
+                    "userID" : str(user_data[0]),
+                    "petID" : ""
+                }
+                response_data = json.dumps(response_data)
+                return HttpResponse(response_data)
         else:
             return HttpResponseBadRequest("Username or password is incorrect.")
     else:
@@ -208,6 +235,56 @@ def register(request):
         return HttpResponseBadRequest()
 
 ### Diary Page ###
+def upload_diary(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            date = data.get('date')
+            petid = data.get('petid')
+            content = data.get('content')
+            place = data.get('place')
+            mood = data.get('mood')
+            weight = data.get('weight')
+            water_intake = data.get('water_intake')
+            food_intake = data.get('food_intake')
+            defecation = data.get('defecation')
+            abnormality = data.get('abnormality')
+            medical_record = data.get('medical_record')
+
+            query = f"UPDATE Diary \
+                    SET content = %s, place = %s, mood = %s \
+               , weight = %s, water_intake = %s, food_intake = %s, defecation = %s \
+               , abnormality = %s, medical_record = %s WHERE petid = %s AND date = %s"
+
+            with connection.cursor() as cursor:
+                    cursor.execute(query, [content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record, petid, date])
+                    if cursor.rowcount == 0:
+                        cursor.execute("INSERT INTO Diary (petid, date, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", [petid, date, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record])
+
+            response_data = {
+                "petid": petid,
+                "date": date,
+                "content": content,
+                "place": place,
+                "mood": mood,
+                "weight": weight,
+                "water_intake": water_intake,
+                "food_intake": food_intake,
+                "defecation": defecation,
+                "abnormality": abnormality,
+                "medical_record": medical_record,
+            }
+
+            return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+        except Exception as e:
+            response_data = {'error': str(e)}
+            return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+    else:
+        return HttpResponseBadRequest("Invalid request method")
+
 def upload_image(request):
     if request.method == 'POST':
         try:
