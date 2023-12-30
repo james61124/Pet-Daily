@@ -356,6 +356,7 @@ def upload_diary(request):
             abnormality = data.get('abnormality')
             medical_record = data.get('medical_record')
 
+            # check if those value is decimal
             if weight is not None and weight.isnumeric():
                 pass
             else:
@@ -370,6 +371,13 @@ def upload_diary(request):
                 pass
             else:
                 food_intake = None
+
+            # convert date format
+            try:
+                parsed_date = datetime.strptime(date, '%m/%d/%Y')
+                date = parsed_date.strftime('%Y-%m-%d')
+            except ValueError:
+                pass
 
             query = """
                     UPDATE Diary

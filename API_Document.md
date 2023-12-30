@@ -177,6 +177,8 @@ data:
 ### /Diary/UploadDiary *POST*
 > description: upload diary at the current date
 目前 mood, abnormality 沒有擋型態，前端傳甚麼後端就存甚麼
+目前沒有檔 petid，就算沒有這隻狗他還是可以上傳
+日期只吃兩種形式，2023-12-31，12/31/2023
 **request**
 ```
 header:
