@@ -356,10 +356,13 @@ def upload_diary(request):
             abnormality = data.get('abnormality')
             medical_record = data.get('medical_record')
 
-            query = f"UPDATE Diary \
-                    SET content = %s, place = %s, mood = %s \
-               , weight = %s, water_intake = %s, food_intake = %s, defecation = %s \
-               , abnormality = %s, medical_record = %s WHERE petid = %s AND date = %s"
+            query = """
+                    UPDATE Diary
+                    SET content = %s, place = %s, mood = %s,
+                        weight = %s, water_intake = %s, food_intake = %s,
+                        defecation = %s, abnormality = %s, medical_record = %s
+                    WHERE petid = %s AND date = %s
+                """
 
             with connection.cursor() as cursor:
                     cursor.execute(query, [content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record, petid, date])
