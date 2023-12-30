@@ -229,7 +229,7 @@ data:
 ## main page
 
 ### /Main/GetMainPagePetInfo *POST*
-> 還沒處理寵物圖片的部分
+> main page 上面寵物資訊的部分，還沒處理寵物圖片
 **request**
 ```
 header:
@@ -259,6 +259,35 @@ data:
 }
 ```
 
+### /Main/GetMainPageDateInfo *POST*
+> 可以回傳所有現在有在資料庫裡這個月所有日期
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	"userID": "your_user_id",
+    "petID": "your_pet_id",
+    "year": "2023",
+    "month": "1"
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"date": [["2023-01-01"], ["2023-01-02"]]
+}
+```
 
 
 # Database 

@@ -451,56 +451,33 @@ def GetMainPageDateInfo(request):
         data = json.loads(request.body)
         userID = data.get('userID')
         petID = data.get('petID')
+        year = data.get('year')
+        month = data.get('month')
 
-        dress_up_product_list = []
-        money = 0
-        
-        # get user money
+        # Convert year and month to integers
+        year = int(year)
+        month = int(month)
+
+        # Construct the raw SQL query
+        query = """
+                SELECT
+                    DATE_FORMAT(date, '%%Y-%%m-%%d') as date
+                FROM
+                    Diary
+                WHERE
+                    petid = %s
+                    AND EXTRACT(YEAR_MONTH FROM date) = %s;
+            """
+
+        # Execute the raw SQL query
         with connection.cursor() as cursor:
-            cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
-            money = cursor.fetchone()
-
-        # get which product user has and where it puts
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s", [userID])
-            user_product = cursor.fetchone()
-        
-        if user_product:
-            for productid, description, posX, posY in user_product:
-                query = f"SELECT image FROM Product WHERE productid = %s"
-                product_image = ""
-                with connection.cursor() as cursor:
-                    cursor.execute(query, [productid])
-                    product_image = cursor.fetchone()
-
-                dress_up_product = {
-                    "Image": product_image,
-                    "posX": str(posX),
-                    "posY": str(posY)
-                }
-
-                dress_up_product_list.append(dress_up_product)
-        
-        # get shop product
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT price, image FROM Product")
-            shop_products = cursor.fetchall()
-        
-        all_shop_product = [(price, image) for price, image  in shop_products]
-        all_shop_product_list = []
-
-        for price, image in all_shop_product:
-            shop_product = {
-                "price": str(price),
-                "image": image
-            }
-            all_shop_product_list.append(shop_product)
+            cursor.execute(query, [petID, year * 100 + month])
+            diary_entries = cursor.fetchall()
 
         response_data = {
-            "money": str(money),
-            "DressUpProduct": dress_up_product_list,
-            "ShopProduct": all_shop_product_list
+            "date": diary_entries
         }
+
 
         response_data = json.dumps(response_data)
 
@@ -508,6 +485,8 @@ def GetMainPageDateInfo(request):
 
     else:
         return HttpResponseBadRequest()
+
+
 
 
 

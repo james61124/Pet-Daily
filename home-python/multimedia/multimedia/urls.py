@@ -31,7 +31,9 @@ urlpatterns = [
     path('Diary/UploadImage', views.upload_image),
     path('Diary/UploadDiary', views.upload_diary),
     path('Diary/GetDiaryInfo', views.get_diary_info),
+
     path('Main/GetMainPagePetInfo', views.GetMainPagePetInfo),
+    path('Main/GetMainPageDateInfo', views.GetMainPageDateInfo),
 
     
     path('Iot/WaterIntake', views.WaterIntake),

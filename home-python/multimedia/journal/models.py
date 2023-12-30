@@ -49,7 +49,7 @@ class Diary(models.Model):
         NORMAL = 'Normal', 'Normal'
         CONSTIPATION = 'Constipation', 'Constipation'
     petid = models.CharField(max_length=60)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateField(auto_now=True)
     image = models.CharField(max_length=100)
     content = models.TextField()
     place = models.CharField(max_length=120)

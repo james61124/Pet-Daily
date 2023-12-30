@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS Product (
 CREATE TABLE IF NOT EXISTS Diary (
     id SERIAL PRIMARY KEY,
     petid VARCHAR(60) NOT NULL,
-    date DATETIME NOT NULL,
+    date DATE NOT NULL,
     image VARCHAR(100),
     content TEXT,
     place VARCHAR(120),
