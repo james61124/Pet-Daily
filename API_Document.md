@@ -2,10 +2,8 @@
 ## login page
 ### /User/Register *POST*
 **request**
-```
-照片還沒處理
+> 照片還沒處理
 username 不能重複
-```
 ```
 header:
 { 
@@ -66,11 +64,11 @@ data:
 ## dress up page
 
 ### /Shop/GetDressPageInfo *POST*
-```
-這是剛進到 Dress Page 會拿到的所有資料
+
+> 這是剛進到 Dress Page 會拿到的所有資料
 Dressup Product 就是之前已經著裝過的寵物的衣服位置
 Shop Product 就是商店裡的所有商品，先給價格就好，status 還沒處理
-```
+
 **request**
 ```
 header:
@@ -109,7 +107,6 @@ data:
 ## diary page
 
 ### /Diary/UploadImage *POST*
-```description: upload image```
 **request**
 ```
 header:
@@ -141,10 +138,8 @@ data:
 ```
 
 ### /Diary/UploadDiary *POST*
-```
-description: upload diary at the current date
+> description: upload diary at the current date
 目前 mood, abnormality 沒有擋型態，前端傳甚麼後端就存甚麼
-```
 **request**
 ```
 header:
