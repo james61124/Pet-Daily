@@ -391,6 +391,124 @@ def get_diary_info(request):
     else:
         return HttpResponseBadRequest("Invalid request method")
 
+### Main Page ###
+def GetMainPagePetInfo(request):
+    if request.method == 'POST':
+        try:
+
+            data = json.loads(request.body)
+            userID = data.get('userID')
+            petID = data.get('petID')
+
+            Money = None
+            Pet = None
+            Breed = None
+            Age = None
+            Gender = None
+            
+            # get pet info
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT name, breed, age, gender FROM Pet WHERE petid = %s", [petID])
+                petInfo = cursor.fetchall()
+            
+            # get user money
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
+                Money = cursor.fetchone()
+
+            
+            if petInfo:
+                pet_info = [(name, breed, age, gender) for name, breed, age, gender in petInfo]
+                for name, breed, age, gender in pet_info:
+                    Name = name
+                    Breed = breed
+                    Age = str(age)
+                    Gender = gender
+            else:
+                return HttpResponseBadRequest("Pet doesn't exist.")
+            
+
+            response_data = {
+                "money": str(Money),
+                "name": Name,
+                "breed": Breed,
+                "age": Age
+            }
+
+            response_data = json.dumps(response_data)
+
+            return HttpResponse(response_data)
+        except Exception as e:
+            response_data = {'error': str(e)}
+            return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+    else:
+        return HttpResponseBadRequest()
+
+def GetMainPageDateInfo(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        userID = data.get('userID')
+        petID = data.get('petID')
+
+        dress_up_product_list = []
+        money = 0
+        
+        # get user money
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
+            money = cursor.fetchone()
+
+        # get which product user has and where it puts
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s", [userID])
+            user_product = cursor.fetchone()
+        
+        if user_product:
+            for productid, description, posX, posY in user_product:
+                query = f"SELECT image FROM Product WHERE productid = %s"
+                product_image = ""
+                with connection.cursor() as cursor:
+                    cursor.execute(query, [productid])
+                    product_image = cursor.fetchone()
+
+                dress_up_product = {
+                    "Image": product_image,
+                    "posX": str(posX),
+                    "posY": str(posY)
+                }
+
+                dress_up_product_list.append(dress_up_product)
+        
+        # get shop product
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT price, image FROM Product")
+            shop_products = cursor.fetchall()
+        
+        all_shop_product = [(price, image) for price, image  in shop_products]
+        all_shop_product_list = []
+
+        for price, image in all_shop_product:
+            shop_product = {
+                "price": str(price),
+                "image": image
+            }
+            all_shop_product_list.append(shop_product)
+
+        response_data = {
+            "money": str(money),
+            "DressUpProduct": dress_up_product_list,
+            "ShopProduct": all_shop_product_list
+        }
+
+        response_data = json.dumps(response_data)
+
+        return HttpResponse(response_data)
+
+    else:
+        return HttpResponseBadRequest()
+
 
 
 

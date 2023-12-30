@@ -228,6 +228,37 @@ data:
 
 ## main page
 
+### /Main/GetMainPagePetInfo *POST*
+> 還沒處理寵物圖片的部分
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	"petid" : ,
+	"date" : 
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"money": ,
+	"name": ,
+	"breed": ,
+	"age":
+}
+```
+
 
 
 # Database 
