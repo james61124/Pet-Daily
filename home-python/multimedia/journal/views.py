@@ -112,14 +112,15 @@ def GetDressPageInfo(request):
         
         # get shop product
         with connection.cursor() as cursor:
-            cursor.execute("SELECT price, image FROM Product")
+            cursor.execute("SELECT price, image, productid FROM Product")
             shop_products = cursor.fetchall()
         
-        all_shop_product = [(price, image) for price, image  in shop_products]
+        all_shop_product = [(price, image, productid) for price, image, productid  in shop_products]
         all_shop_product_list = []
 
-        for price, image in all_shop_product:
+        for price, image, productid in all_shop_product:
             shop_product = {
+                "productid": productid,
                 "price": str(price),
                 "image": image
             }
@@ -134,6 +135,71 @@ def GetDressPageInfo(request):
         response_data = json.dumps(response_data)
 
         return HttpResponse(response_data)
+
+    else:
+        return HttpResponseBadRequest()
+
+# /Shop/GetDressPageInfo
+def Buy(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        userID = data.get('userID')
+        petID = data.get('petID')
+        productID = data.get('productID')
+        money = 0
+        
+        # get user money
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
+            money = cursor.fetchone()
+        if money is None:
+            return HttpResponseBadRequest('User doesn\'t exist')
+        
+        # check if this product user has bought
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
+            product = cursor.fetchone()
+        
+        if product is None:
+            return HttpResponseBadRequest('Product doesn\'t exist')
+
+        # check if this product user has bought
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productID])
+            user_product = cursor.fetchone()
+        
+        if user_product:
+            return HttpResponseBadRequest('User has bought this product')
+
+
+        # get product price
+        price = 0
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT price FROM Product WHERE productid = %s", [productID])
+            price = cursor.fetchone()
+
+        money = money[0]
+        price = price[0]
+        
+        if price > money:
+            return HttpResponseBadRequest('User doesn\'t have enought money')
+        
+
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO UserProduct (userid, productid) VALUES (%s, %s)", [userID, productID])
+        
+        money = money - price
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE User SET money = %s WHERE userid = %s", [money, userID])
+        
+        response_data = {
+            "userid": userID,
+            "money": str(money),
+            "productid": productID
+        }
+
+        return HttpResponse(json.dumps(response_data))
 
     else:
         return HttpResponseBadRequest()

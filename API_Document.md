@@ -63,7 +63,7 @@ data:
 
 ## dress up page
 
-### /Shop/GetDressPageInfo *POST*
+### /Dressup/GetDressPageInfo *POST*
 
 > 這是剛進到 Dress Page 會拿到的所有資料
 Dressup Product 就是之前已經著裝過的寵物的衣服位置
@@ -91,16 +91,49 @@ header:
 ```
 data: 
 {
-	"money": "",
+	"money": Decimal('1000'),
 	"DressUpProduct": [{
 		"Image": "",
 		"posX": "",
 		"posY": ""
 	}, ...]
 	"ShopProduct": [{
-		"price": "",
-		"image": ""
+		"productid": "blue_hat.png",
+		"price": "10",
+		"image": "http://107.191.60.115:81/image/shop/blue_hat.png"
 	}, ...]
+}
+```
+
+### /Dressup/Buy *POST*
+
+> 錢不夠
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	"userID" : "user_id",
+	"petID" : "petID",
+	"productID" : "productID"
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"userid": "userid",
+	"money": "1000",
+	"productid": "productid"
 }
 ```
 
@@ -281,8 +314,6 @@ header:
 { 
 	"content_type" : 'application/json'
 }
-```
-```
 data: 
 {
 	"date": [["2023-01-01"], ["2023-01-02"]]

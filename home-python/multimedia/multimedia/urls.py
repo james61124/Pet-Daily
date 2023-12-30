@@ -27,7 +27,9 @@ urlpatterns = [
     path('get_all_user', views.get_all_user),
     path('delete_user', views.delete_user), 
 
-    path('Shop/GetDressPageInfo', views.GetDressPageInfo),
+    path('Dressup/GetDressPageInfo', views.GetDressPageInfo),
+    path('Dressup/Buy', views.Buy),
+
     path('Diary/UploadImage', views.upload_image),
     path('Diary/UploadDiary', views.upload_diary),
     path('Diary/GetDiaryInfo', views.get_diary_info),
