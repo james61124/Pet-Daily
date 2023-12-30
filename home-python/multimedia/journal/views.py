@@ -8,6 +8,7 @@ from datetime import datetime
 import base64 
 import io 
 import json
+import os
 
 ### Iot
 def FoodIntake(request):
@@ -206,6 +207,51 @@ def register(request):
     else:
         return HttpResponseBadRequest()
 
+### Diary Page ###
+def upload_image(request):
+    if request.method == 'POST':
+        try:
+            userID = request.POST.get('userID')
+            petID = request.POST.get('petID')
+            date = request.POST.get('date')
+            image_file = request.FILES.get('image')
+
+            if image_file:
+                image_path = f'/home/multimedia/journal/image/user/{userID}/{date}.jpg'
+                if not os.path.exists(os.path.dirname(image_path)):
+                    try:
+                        os.makedirs(os.path.dirname(image_path))
+                    except OSError as e:
+                        response_data = {'error': str(e)}
+                        return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+                with open(image_path, 'wb') as destination:
+                    for chunk in image_file.chunks():
+                        destination.write(chunk)
+
+                image_url = f'http://107.191.60.115:81/image/user/{userID}/{date}.jpg'
+
+                with connection.cursor() as cursor:
+                    cursor.execute("UPDATE Diary SET image = %s WHERE petid = %s AND date = %s", [image_url, petID, date])
+                    if cursor.rowcount == 0:
+                        cursor.execute("INSERT INTO Diary (petid, date, image) VALUES (%s, %s, %s)", [petID, date, image_url])
+
+                response_data = {
+                    "image": image_url
+                }
+
+                return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+            else:
+                response_data = {'error': 'No image file provided'}
+                return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+        except Exception as e:
+            response_data = {'error': str(e)}
+            return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+    else:
+        return HttpResponseBadRequest("Invalid request method")
 
 
 #################################################################################################

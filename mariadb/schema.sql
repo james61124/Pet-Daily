@@ -33,18 +33,34 @@ CREATE TABLE IF NOT EXISTS UserProduct (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userid VARCHAR(60) NOT NULL,
     productid VARCHAR(60) NOT NULL,
-    description VARCHAR(10) NOT NULL,
-    posX DECIMAL(4, 0) NOT NULL,
-    posY DECIMAL(4, 0) NOT NULL
+    description VARCHAR(10),
+    posX DECIMAL(4, 0),
+    posY DECIMAL(4, 0)
 );
 
 CREATE TABLE IF NOT EXISTS Product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     productid VARCHAR(60) NOT NULL,
-    name VARCHAR(36) NOT NULL,
-    price DECIMAL(5, 0) NOT NULL,
-    image VARCHAR(100) NOT NULL,
-    product_type VARCHAR(10) NOT NULL
+    name VARCHAR(36),
+    price DECIMAL(5, 0),
+    image VARCHAR(100),
+    product_type VARCHAR(10)
+);
+
+CREATE TABLE IF NOT EXISTS Diary (
+    id SERIAL PRIMARY KEY,
+    petid VARCHAR(60) NOT NULL,
+    date DATETIME NOT NULL,
+    image VARCHAR(100),
+    content TEXT,
+    place VARCHAR(120),
+    mood VARCHAR(10),
+    weight DECIMAL(6, 3),
+    water_intake DECIMAL(4, 0),
+    food_intake DECIMAL(5, 3),
+    defecation VARCHAR(20),
+    abnormality TEXT,
+    medical_record TEXT
 );
 
 CREATE TABLE IF NOT EXISTS IotWeight (

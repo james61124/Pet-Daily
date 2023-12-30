@@ -21,17 +21,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('User/Register/', views.register),
-    path('User/Login/', views.login),
-    path('get_all_user/', views.get_all_user),
-    path('delete_user/', views.delete_user), 
+    path('admin', admin.site.urls),
+    path('User/Register', views.register),
+    path('User/Login', views.login),
+    path('get_all_user', views.get_all_user),
+    path('delete_user', views.delete_user), 
 
-    path('Shop/GetDressPageInfo/', views.GetDressPageInfo),
+    path('Shop/GetDressPageInfo', views.GetDressPageInfo),
+    path('Diary/UploadImage', views.upload_image),
     
-    path('Iot/WaterIntake/', views.WaterIntake),
-    path('Iot/FoodIntake/', views.FoodIntake),
-    path('Iot/Weight/', views.Weight),
+    path('Iot/WaterIntake', views.WaterIntake),
+    path('Iot/FoodIntake', views.FoodIntake),
+    path('Iot/Weight', views.Weight),
 ]
 
 urlpatterns += static(settings.IMAGE_URL, document_root=settings.IMAGE_ROOT)
