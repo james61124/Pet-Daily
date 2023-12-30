@@ -339,9 +339,10 @@ def get_diary_info(request):
             petid = data.get('petid')
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record FROM Diary WHERE petid = %s AND date = %s", [petid, date])
+                cursor.execute("SELECT image, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record FROM Diary WHERE petid = %s AND date = %s", [petid, date])
                 diary_info = cursor.fetchall()
             
+            Image = None
             Content = None
             Place = None
             Mood = None
@@ -353,8 +354,9 @@ def get_diary_info(request):
             MedicalRecord = None
 
             if diary_info:
-                all_diary_info = [(content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record) for content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in diary_info]
-                for content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in all_diary_info:
+                all_diary_info = [(image, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record) for image, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in diary_info]
+                for image, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in all_diary_info:
+                    Image = image
                     Content = content
                     Place = place
                     Mood = mood
@@ -368,6 +370,7 @@ def get_diary_info(request):
             response_data = {
                 "petid": petid,
                 "date": date,
+                "image": Image,
                 "content": Content,
                 "place": Place,
                 "mood": Mood,
