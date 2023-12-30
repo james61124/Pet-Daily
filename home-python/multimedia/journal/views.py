@@ -139,7 +139,6 @@ def GetDressPageInfo(request):
     else:
         return HttpResponseBadRequest()
 
-# /Shop/GetDressPageInfo
 def Buy(request):
     if request.method == 'POST':
 
@@ -156,7 +155,7 @@ def Buy(request):
         if money is None:
             return HttpResponseBadRequest('User doesn\'t exist')
         
-        # check if this product user has bought
+        # check if product exist
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
             product = cursor.fetchone()
@@ -200,6 +199,45 @@ def Buy(request):
         }
 
         return HttpResponse(json.dumps(response_data))
+
+    else:
+        return HttpResponseBadRequest()
+
+def UpdateUserProductPosition(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        userID = data.get('userID')
+        petID = data.get('petID')
+        productID = data.get('productID')
+        posX = data.get('posX')
+        poxY = data.get('poxY')
+
+        # check if user exists
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM User WHERE userid = %s", [userID])
+            user_info = cursor.fetchone()
+        if user_info is None:
+            return HttpResponseBadRequest('User doesn\'t exist')
+        
+        # check if product exist
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
+            product = cursor.fetchone()
+        if product is None:
+            return HttpResponseBadRequest('Product doesn\'t exist')
+
+        # check if this product user has bought
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productID])
+            user_product = cursor.fetchone()
+        if user_product is None:
+            return HttpResponseBadRequest('User hasn\'t bought this product')
+
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s WHERE userid = %s AND productid = %s", [posX, posY, userID, productID])
+                
+        return HttpResponse(response_data)
 
     else:
         return HttpResponseBadRequest()

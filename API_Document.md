@@ -106,7 +106,6 @@ data:
 ```
 
 ### /Dressup/Buy *POST*
-
 > 按下購買後會回傳剩餘的錢，如果需要我回傳整個商品列表的 status 再跟我說
 error handle：
 1. userID 不存在或是 productID 不存在
