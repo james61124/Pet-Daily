@@ -21,11 +21,11 @@ data:
 ```
 
 **response**
+```
 header:
 { 
 	"content_type" : 'application/json'
 }
-```
 data:
 {
 	"userID" : "",
@@ -171,6 +171,7 @@ header:
 ```
 data: 
 {
+	"petid" : ,
 	"date" : ,
 	"content" : ,
 	"place" : ,
@@ -183,6 +184,46 @@ data:
 	"medical_record" :
 }
 ```
+
+### /Diary/GetDiaryInfo *POST*
+> 表示要取得這個日期之前所儲存的資料
+目前 iot 接到資料了，但是還沒更新上資料庫
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	"petid" : ,
+	"date" : 
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	"petid" : ,
+	"date" : ,
+	"content" : ,
+	"place" : ,
+	"mood" : ,
+	"weight" : ,
+	"water_intake" : ,
+	"food_intake" : ,
+	"defecation" : ,
+	"abnormality" : ,
+	"medical_record" :
+}
+```
+
 
 ## main page
 

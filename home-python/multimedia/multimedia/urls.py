@@ -30,6 +30,8 @@ urlpatterns = [
     path('Shop/GetDressPageInfo', views.GetDressPageInfo),
     path('Diary/UploadImage', views.upload_image),
     path('Diary/UploadDiary', views.upload_diary),
+    path('Diary/GetDiaryInfo', views.get_diary_info),
+
     
     path('Iot/WaterIntake', views.WaterIntake),
     path('Iot/FoodIntake', views.FoodIntake),

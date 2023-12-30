@@ -330,6 +330,66 @@ def upload_image(request):
     else:
         return HttpResponseBadRequest("Invalid request method")
 
+def get_diary_info(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            date = data.get('date')
+            petid = data.get('petid')
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record FROM Diary WHERE petid = %s AND date = %s", [petid, date])
+                diary_info = cursor.fetchall()
+            
+            Content = None
+            Place = None
+            Mood = None
+            Weight = None
+            WaterIntake = None
+            FoodIntake = None
+            Defecation = None
+            Abnormality = None
+            MedicalRecord = None
+
+            if diary_info:
+                all_diary_info = [(content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record) for content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in diary_info]
+                for content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record in all_diary_info:
+                    Content = content
+                    Place = place
+                    Mood = mood
+                    Weight = str(weight)
+                    WaterIntake = str(water_intake)
+                    FoodIntake = str(food_intake)
+                    Defecation = defecation
+                    Abnormality = abnormality
+                    MedicalRecord = medical_record
+
+            response_data = {
+                "petid": petid,
+                "date": date,
+                "content": Content,
+                "place": Place,
+                "mood": Mood,
+                "weight": Weight,
+                "water_intake": WaterIntake,
+                "food_intake": FoodIntake,
+                "defecation": Defecation,
+                "abnormality": Abnormality,
+                "medical_record": MedicalRecord
+            }
+
+            return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+        except Exception as e:
+            response_data = {'error': str(e)}
+            return HttpResponseBadRequest(json.dumps(response_data), content_type='application/json')
+
+    else:
+        return HttpResponseBadRequest("Invalid request method")
+
+
+
 
 #################################################################################################
 
