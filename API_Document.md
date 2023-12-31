@@ -277,8 +277,8 @@ header:
 }
 data:
 {
-	"petid" : ,
-	"date" : 
+	"userID" : ,
+	"petID" : 
 }
 ```
 **response**

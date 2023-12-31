@@ -423,6 +423,13 @@ def upload_image(request):
             date = request.POST.get('date')
             image_file = request.FILES.get('image')
 
+            # convert date format
+            try:
+                parsed_date = datetime.strptime(date, '%m/%d/%Y')
+                date = parsed_date.strftime('%Y-%m-%d')
+            except ValueError:
+                pass
+
             if image_file:
                 image_path = f'/home/multimedia/journal/image/user/{userID}/{date}.jpg'
                 if not os.path.exists(os.path.dirname(image_path)):
@@ -545,6 +552,8 @@ def GetMainPagePetInfo(request):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
                 Money = cursor.fetchone()
+            
+            Money = Money[0]
 
             
             if petInfo:
@@ -607,7 +616,6 @@ def GetMainPageDateInfo(request):
         response_data = {
             "date": diary_entries
         }
-
 
         response_data = json.dumps(response_data)
 
