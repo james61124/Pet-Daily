@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Product (
     name VARCHAR(36),
     price DECIMAL(5, 0),
     image VARCHAR(100),
-    product_type VARCHAR(10)
+    product_type VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS Diary (
