@@ -137,7 +137,7 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(days=1),  # 令牌过期时间
 }
 
-IMAGE_ROOT = '/home/multimedia/journal/image'
+IMAGE_ROOT = '/home/multimedia/journal/image' #
 IMAGE_URL = '/image/'
 
 LOGGING = {
