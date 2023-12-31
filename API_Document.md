@@ -91,17 +91,23 @@ header:
 ```
 data: 
 {
-	"money": Decimal('1000'),
+	"money": 1000,
 	"DressUpProduct": [{
 		"Image": "",
 		"posX": "",
-		"posY": ""
+		"posY": "",
+		"width": "",
+		"height": "",
+		"productid": "",
+		"type": "",
+		"zIndex": 0
 	}, ...]
-	"ShopProduct": [{
+	"ShopProduct": ["type": [{
 		"productid": "blue_hat.png",
 		"price": "10",
-		"image": "http://107.191.60.115:81/image/shop/blue_hat.png"
-	}, ...]
+		"image": "http://107.191.60.115:81/image/shop/blue_hat.png",
+		"bought": boolean}, ...]
+	, ...]
 }
 ```
 
@@ -172,7 +178,7 @@ header:
 ```
 data: 
 {
-	
+
 }
 ```
 
