@@ -16,7 +16,7 @@ class JournalConfig(AppConfig):
                 productid = filename
                 name = filename
                 price = 10
-                product_type = "chinese_new_year"
+                product_type = "chinese_new_year" #
 
                 # Check if filename already exists in the Product table
                 with connection.cursor() as cursor:
