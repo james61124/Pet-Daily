@@ -29,6 +29,7 @@ urlpatterns = [
 
     path('Dressup/GetDressPageInfo', views.GetDressPageInfo),
     path('Dressup/Buy', views.Buy),
+    path('Dressup/UpdateUserProductPosition', views.UpdateUserProductPosition),
 
     path('Diary/UploadImage', views.upload_image),
     path('Diary/UploadDiary', views.upload_diary),

@@ -141,6 +141,41 @@ data:
 }
 ```
 
+### /Dressup/UpdateUserProductPosition *POST*
+> 
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	'userID': user_id,
+    'petID': pet_id,
+    'productID': product_id,
+    'posX': 10,
+    'posY': 10,
+    'width': 10,
+    'height': 10,
+    'type': hat,
+    'zIndex': 0
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
+	
+}
+```
+
 ## diary page
 
 ### /Diary/UploadImage *POST*
@@ -269,6 +304,7 @@ data:
 
 ### /Main/GetMainPagePetInfo *POST*
 > main page 上面寵物資訊的部分，還沒處理寵物圖片
+沒有這個 user 或 pet 會拿不到東西
 **request**
 ```
 header:

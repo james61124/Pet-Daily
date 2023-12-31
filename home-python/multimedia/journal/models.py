@@ -14,6 +14,9 @@ class UserProduct(models.Model):
     description = models.CharField(max_length=10)
     posX = models.DecimalField(max_digits = 4, decimal_places= 0)
     posY = models.DecimalField(max_digits = 4, decimal_places= 0)
+    width = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
+    height = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
+    zIndex = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
 
 class Pet(models.Model):
     class Gender(models.TextChoices):
@@ -38,6 +41,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits = 5, decimal_places= 0)
     image = models.CharField(max_length=100)
     product_type = models.CharField(max_length=10, choices=ProductType.choices)
+    
 
 class Diary(models.Model):
     class Mood(models.TextChoices):

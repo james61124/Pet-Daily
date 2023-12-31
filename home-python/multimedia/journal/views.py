@@ -74,6 +74,30 @@ def Weight(request):
         return HttpResponseBadRequest()
 
 ### Dress Up ###
+# data: 
+# {
+#  "money": Decimal('1000'),
+#  "DressUpProduct": [{
+#   "Image": "",
+#   "posX": "",
+#   "posY": "",
+#   ***"width": "",
+#   ***"height": "",
+#   ***"productid": "",
+#   ***"type": "",
+#   ***"zIndex": 0
+#  }, ...],
+#  "ShopProduct": {
+#   [type]: [
+#    {
+#     "productid": "blue_hat.png",
+#     "price": "10",
+#     "image": "http://107.191.60.115:81/image/shop/blue_hat.png",
+#     ***"bought": boolean,
+#    },...
+#   ],...
+#  }
+# }
 def GetDressPageInfo(request):
     if request.method == 'POST':
 
@@ -88,48 +112,72 @@ def GetDressPageInfo(request):
         with connection.cursor() as cursor:
             cursor.execute("SELECT money FROM User WHERE userid = %s", [userID])
             money = cursor.fetchone()
+        money = money[0]
 
         # get which product user has and where it puts
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s", [userID])
-            user_product = cursor.fetchone()
+            cursor.execute("SELECT productid, posX, posY, width, height, zIndex FROM UserProduct WHERE userid = %s", [userID])
+            user_product = cursor.fetchall()
         
-        if user_product:
-            for productid, description, posX, posY in user_product:
-                query = f"SELECT image FROM Product WHERE productid = %s"
-                product_image = ""
+        if user_product is not None:
+            for productid, posX, posY, width, height, zIndex in user_product:
+                query = f"SELECT image, product_type FROM Product WHERE productid = %s"
+                product_info = ""
                 with connection.cursor() as cursor:
                     cursor.execute(query, [productid])
-                    product_image = cursor.fetchone()
+                    product_info = cursor.fetchall()
+                
+                Image = ""
+                Type = ""
+                if product_info:
+                    for image, product_type in product_info:
+                        Image = image
+                        Type = product_type
 
                 dress_up_product = {
-                    "Image": product_image,
+                    "Image": Image,
                     "posX": str(posX),
-                    "posY": str(posY)
+                    "posY": str(posY),
+                    "width": str(width),
+                    "height": str(height),
+                    "productid": productid,
+                    "type": Type,
+                    "zIndex": str(zIndex)
                 }
-
                 dress_up_product_list.append(dress_up_product)
         
         # get shop product
         with connection.cursor() as cursor:
-            cursor.execute("SELECT price, image, productid FROM Product")
+            cursor.execute("SELECT price, image, productid, product_type FROM Product")
             shop_products = cursor.fetchall()
         
-        all_shop_product = [(price, image, productid) for price, image, productid  in shop_products]
-        all_shop_product_list = []
+        all_shop_product = [(price, image, productid, product_type) for price, image, productid, product_type in shop_products]
+        all_shop_product_dict = {}
 
-        for price, image, productid in all_shop_product:
+        for price, image, productid, product_type in all_shop_product:
+            # check if this product user has bought
+            bought = False
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productid])
+                user_product = cursor.fetchone()
+            if user_product:
+                bought = True
+
             shop_product = {
                 "productid": productid,
                 "price": str(price),
-                "image": image
+                "image": image,
+                "bought": str(bought)
             }
-            all_shop_product_list.append(shop_product)
+            if product_type in all_shop_product_dict:
+                all_shop_product_dict[product_type].append(shop_product)
+            else:
+                all_shop_product_dict[product_type] = [shop_product]
 
         response_data = {
             "money": str(money),
             "DressUpProduct": dress_up_product_list,
-            "ShopProduct": all_shop_product_list
+            "ShopProduct": all_shop_product_dict
         }
 
         response_data = json.dumps(response_data)
@@ -211,7 +259,12 @@ def UpdateUserProductPosition(request):
         petID = data.get('petID')
         productID = data.get('productID')
         posX = data.get('posX')
-        poxY = data.get('poxY')
+        posY = data.get('posY')
+
+        width = data.get('width')
+        height = data.get('height')
+        type_ = data.get('type')
+        zIndex = data.get('zIndex')
 
         # check if user exists
         with connection.cursor() as cursor:
@@ -235,9 +288,9 @@ def UpdateUserProductPosition(request):
             return HttpResponseBadRequest('User hasn\'t bought this product')
 
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s WHERE userid = %s AND productid = %s", [posX, posY, userID, productID])
+            cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, userID, productID])
                 
-        return HttpResponse(response_data)
+        return HttpResponse()
 
     else:
         return HttpResponseBadRequest()
@@ -503,6 +556,11 @@ def get_diary_info(request):
                     Defecation = defecation
                     Abnormality = abnormality
                     MedicalRecord = medical_record
+            
+            # with connection.cursor() as cursor:
+            #     cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
+            #     total_water_intake = cursor.fetchall()
+            # total_water_intake_list = [(date, water_intake) for date, water_intake in total_water_intake]
 
             response_data = {
                 "petid": petid,

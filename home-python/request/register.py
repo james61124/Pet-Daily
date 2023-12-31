@@ -4,7 +4,7 @@ import json
 url = "http://localhost:8000/User/Register"
 
 data = {
-    'username': 'test5',
+    'username': 'username',
     'password': 'password',
     'breed': 'dog',
     'petName': 'testpet',
