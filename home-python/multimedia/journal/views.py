@@ -211,7 +211,7 @@ def Buy(request):
         
 
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO UserProduct (userid, productid) VALUES (%s, %s)", [userID, productID])
+            cursor.execute("INSERT INTO UserProduct (userid, productid, equipped) VALUES (%s, %s, %s)", [userID, productID, 0])
         
         money = money - price
         with connection.cursor() as cursor:
