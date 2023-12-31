@@ -17,6 +17,7 @@ class UserProduct(models.Model):
     width = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
     height = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
     zIndex = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
+    equipped = models.DecimalField(max_digits = 4, decimal_places= 0, default=0)
 
 class Pet(models.Model):
     class Gender(models.TextChoices):

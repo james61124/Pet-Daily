@@ -74,30 +74,6 @@ def Weight(request):
         return HttpResponseBadRequest()
 
 ### Dress Up ###
-# data: 
-# {
-#  "money": Decimal('1000'),
-#  "DressUpProduct": [{
-#   "Image": "",
-#   "posX": "",
-#   "posY": "",
-#   ***"width": "",
-#   ***"height": "",
-#   ***"productid": "",
-#   ***"type": "",
-#   ***"zIndex": 0
-#  }, ...],
-#  "ShopProduct": {
-#   [type]: [
-#    {
-#     "productid": "blue_hat.png",
-#     "price": "10",
-#     "image": "http://107.191.60.115:81/image/shop/blue_hat.png",
-#     ***"bought": boolean,
-#    },...
-#   ],...
-#  }
-# }
 def GetDressPageInfo(request):
     if request.method == 'POST':
 
@@ -116,11 +92,11 @@ def GetDressPageInfo(request):
 
         # get which product user has and where it puts
         with connection.cursor() as cursor:
-            cursor.execute("SELECT productid, posX, posY, width, height, zIndex FROM UserProduct WHERE userid = %s", [userID])
+            cursor.execute("SELECT productid, posX, posY, width, height, zIndex, equipped FROM UserProduct WHERE userid = %s", [userID])
             user_product = cursor.fetchall()
         
         if user_product is not None:
-            for productid, posX, posY, width, height, zIndex in user_product:
+            for productid, posX, posY, width, height, zIndex, equipped in user_product:
                 query = f"SELECT image, product_type FROM Product WHERE productid = %s"
                 product_info = ""
                 with connection.cursor() as cursor:
@@ -142,7 +118,8 @@ def GetDressPageInfo(request):
                     "height": str(height),
                     "productid": productid,
                     "type": Type,
-                    "zIndex": str(zIndex)
+                    "zIndex": str(zIndex),
+                    "equipped": str(equipped)
                 }
                 dress_up_product_list.append(dress_up_product)
         
