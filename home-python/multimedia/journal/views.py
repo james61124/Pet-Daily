@@ -122,6 +122,8 @@ def GetDressPageInfo(request):
                     "equipped": equipped
                 }
                 dress_up_product_list.append(dress_up_product)
+
+        print(dress_up_product_list)
         
         # get shop product
         with connection.cursor() as cursor:
@@ -414,8 +416,8 @@ def register(request):
         with connection.cursor() as cursor:
             user_product_id = f"{userID}_{image}"
             cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [user_product_id, image, 10, image, "Pet"])
-            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [1, True, userID, "bg_1.png"])
-            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [2, True, userID, user_product_id])
+            cursor.execute("INSERT INTO UserProduct (userid, productid, zIndex, equipped) VALUES (%s, %s, %s, %s)", [userID, "bg_1.png", 1, True])
+            cursor.execute("INSERT INTO UserProduct (userid, productid, zIndex, equipped) VALUES (%s, %s, %s, %s)", [userID, user_product_id, 2, True])
         
         response_data = {
             "userID" : userID,
