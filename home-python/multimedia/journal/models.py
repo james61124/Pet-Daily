@@ -69,12 +69,12 @@ class Diary(models.Model):
 
 class IotWeight(models.Model):
     date = models.DateTimeField(auto_now=True)
-    weight = models.DecimalField(max_digits=6, decimal_places=3)  # kg 
+    weight = models.DecimalField(max_digits=15, decimal_places=7)  # kg 
 
 class IotWaterIntake(models.Model):
     date = models.DateTimeField(auto_now=True)
-    water_intake = models.DecimalField(max_digits=4, decimal_places=0)  # ml 
+    water_intake = models.DecimalField(max_digits=15, decimal_places=7)  # ml 
 
 class IotFoodIntake(models.Model):
     date = models.DateTimeField(auto_now=True)
-    food_intake = models.DecimalField(max_digits=5, decimal_places=3)  # kg
+    food_intake = models.DecimalField(max_digits=15, decimal_places=7)  # kg

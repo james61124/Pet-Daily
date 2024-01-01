@@ -71,17 +71,17 @@ CREATE TABLE IF NOT EXISTS Diary (
 CREATE TABLE IF NOT EXISTS IotWeight (
     id SERIAL PRIMARY KEY,
     date DATETIME NOT NULL,
-    weight DECIMAL(6, 3) NOT NULL
+    weight DECIMAL(15, 7) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS IotWaterIntake (
     id SERIAL PRIMARY KEY,
     date DATETIME NOT NULL,
-    water_intake DECIMAL(4, 0) NOT NULL
+    water_intake DECIMAL(15, 7) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS IotFoodIntake (
     id SERIAL PRIMARY KEY,
     date DATETIME NOT NULL,
-    food_intake DECIMAL(5, 0) NOT NULL
+    food_intake DECIMAL(15, 7) NOT NULL
 );
