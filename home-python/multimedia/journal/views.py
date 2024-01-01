@@ -258,6 +258,8 @@ def _updateUserProductPosition(data, userID, petID):
     type_ = data.get('type')
     zIndex = data.get('zIndex')
 
+    
+
     # check if product exist
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
@@ -305,10 +307,15 @@ def _updateUserProductPosition(data, userID, petID):
     if zIndex is not None:
         update_query += "zIndex = %s, "
         params.append(zIndex)
+    
+    
 
     # Add the common parameters
     update_query += "equipped = %s WHERE userid = %s AND productid = %s"
     params.extend([True, userID, productID])
+
+    print(update_query)
+    print(userID, productID)
 
     with connection.cursor() as cursor:
         cursor.execute(update_query, params)
@@ -824,12 +831,47 @@ def GetMainPagePetInfo(request):
             else:
                 return HttpResponseBadRequest("Pet doesn't exist.")
             
+            # get which product user has and where it puts
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT productid, posX, posY, width, height, zIndex, equipped FROM UserProduct WHERE userid = %s", [userID])
+                user_product = cursor.fetchall()
+            
+            dress_up_product_list = []
+            if user_product is not None:
+                for productid, posX, posY, width, height, zIndex, equipped in user_product:
+                    query = f"SELECT image, product_type FROM Product WHERE productid = %s"
+                    product_info = ""
+                    with connection.cursor() as cursor:
+                        cursor.execute(query, [productid])
+                        product_info = cursor.fetchall()
+                    
+                    Image = ""
+                    Type = ""
+                    if product_info:
+                        for image, product_type in product_info:
+                            Image = image
+                            Type = product_type
+
+                    dress_up_product = {
+                        "Image": Image,
+                        "posX": int(posX),
+                        "posY": int(posY),
+                        "width": int(width),
+                        "height": int(height),
+                        "productid": productid,
+                        "type": Type,
+                        "zIndex": int(zIndex),
+                        "equipped": equipped
+                    }
+                    dress_up_product_list.append(dress_up_product)
+            
 
             response_data = {
                 "money": str(Money),
                 "name": Name,
                 "breed": Breed,
-                "age": Age
+                "age": Age,
+                "DressUpProduct": dress_up_product_list
             }
 
             response_data = json.dumps(response_data)

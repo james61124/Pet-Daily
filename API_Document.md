@@ -403,7 +403,18 @@ data:
 	"money": ,
 	"name": ,
 	"breed": ,
-	"age":
+	"age": ,
+	"DressUpProduct": [{
+		"Image": "",
+		"posX": "",
+		"posY": "",
+		"width": "",
+		"height": "",
+		"productid": "",
+		"type": "",
+		"zIndex": 0,
+		"equipped": boolean
+	}, ...]
 }
 ```
 
