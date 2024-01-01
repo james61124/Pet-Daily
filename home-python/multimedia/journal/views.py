@@ -247,20 +247,103 @@ def Buy(request):
     else:
         return HttpResponseBadRequest()
 
+def _updateUserProductPosition(data, userID, petID):
+    
+    productID = data.get('productID')
+    posX = data.get('posX')
+    posY = data.get('posY')
+
+    width = data.get('width')
+    height = data.get('height')
+    type_ = data.get('type')
+    zIndex = data.get('zIndex')
+
+    # check if product exist
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
+        product = cursor.fetchall()
+    if product is None:
+        return ('error', 'Product doesn\'t exist')
+
+    # check if this product user has bought
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productID])
+        user_product = cursor.fetchall()
+    if user_product is None:
+        return ('error', 'User hasn\'t bought this product')
+    
+    # update zindex
+    if zIndex == -1:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT zIndex FROM UserProduct WHERE userid = %s", [userID])
+            user_product = cursor.fetchall()
+        max_zIndex = -1
+        for z_index in user_product:
+            z_index = z_index[0]
+            if z_index > max_zIndex:
+                max_zIndex = z_index
+        zIndex = max_zIndex + 1
+
+    # with connection.cursor() as cursor:
+    #     cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
+
+    update_query = "UPDATE UserProduct SET "
+    params = []
+
+    if posX is not None:
+        update_query += "posX = %s, "
+        params.append(posX)
+    if posY is not None:
+        update_query += "posY = %s, "
+        params.append(posY)
+    if width is not None:
+        update_query += "width = %s, "
+        params.append(width)
+    if height is not None:
+        update_query += "height = %s, "
+        params.append(height)
+    if zIndex is not None:
+        update_query += "zIndex = %s, "
+        params.append(zIndex)
+
+    # Add the common parameters
+    update_query += "equipped = %s WHERE userid = %s AND productid = %s"
+    params.extend([True, userID, productID])
+
+    with connection.cursor() as cursor:
+        cursor.execute(update_query, params)
+            
+    return ('success','')
+
+
 def UpdateUserProductPosition(request):
     if request.method == 'POST':
 
         data = json.loads(request.body)
         userID = data.get('userID')
         petID = data.get('petID')
-        productID = data.get('productID')
-        posX = data.get('posX')
-        posY = data.get('posY')
 
-        width = data.get('width')
-        height = data.get('height')
-        type_ = data.get('type')
-        zIndex = data.get('zIndex')
+        # check if user exists
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM User WHERE userid = %s", [userID])
+            user_info = cursor.fetchall()
+        if user_info is None:
+            return ('error', 'User doesn\'t exist')
+
+        result = _updateUserProductPosition(data, userID, petID)
+        if result[0] == 'success':
+            HttpResponse()
+        else:
+            HttpResponseBadRequest(result[1])
+    else:
+        return HttpResponseBadRequest()
+
+def Multi_UpdateUserProductPosition(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        userID = data.get('userID')
+        petID = data.get('petID')
 
         # check if user exists
         with connection.cursor() as cursor:
@@ -268,66 +351,13 @@ def UpdateUserProductPosition(request):
             user_info = cursor.fetchall()
         if user_info is None:
             return HttpResponseBadRequest('User doesn\'t exist')
-        
-        # check if product exist
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
-            product = cursor.fetchall()
-        if product is None:
-            return HttpResponseBadRequest('Product doesn\'t exist')
 
-        # check if this product user has bought
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productID])
-            user_product = cursor.fetchall()
-        if user_product is None:
-            return HttpResponseBadRequest('User hasn\'t bought this product')
-        
-        # update zindex
-        if zIndex == -1:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT zIndex FROM UserProduct WHERE userid = %s", [userID])
-                user_product = cursor.fetchall()
-            max_zIndex = -1
-            for z_index in user_product:
-                z_index = z_index[0]
-                if z_index > max_zIndex:
-                    max_zIndex = z_index
-            zIndex = max_zIndex + 1
-
-        # with connection.cursor() as cursor:
-        #     cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
-
-        update_query = "UPDATE UserProduct SET "
-        params = []
-
-        if posX is not None:
-            update_query += "posX = %s, "
-            params.append(posX)
-        if posY is not None:
-            update_query += "posY = %s, "
-            params.append(posY)
-        if width is not None:
-            update_query += "width = %s, "
-            params.append(width)
-        if height is not None:
-            update_query += "height = %s, "
-            params.append(height)
-        if zIndex is not None:
-            update_query += "zIndex = %s, "
-            params.append(zIndex)
-
-        # Add the common parameters
-        update_query += "equipped = %s WHERE userid = %s AND productid = %s"
-        params.extend([True, userID, productID])
-
-        with connection.cursor() as cursor:
-            cursor.execute(update_query, params)
-                
-        return HttpResponse()
-
+        products = data.get('products')
+        for product in products:
+            _updateUserProductPosition(product)
     else:
         return HttpResponseBadRequest()
+    pass
 
 def UpdateProductStatus(request):
     if request.method == 'POST':
