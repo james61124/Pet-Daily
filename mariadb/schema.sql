@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS UserProduct (
     width DECIMAL(4, 0),
     height DECIMAL(4, 0),
     zIndex DECIMAL(4, 0),
-    equipped DECIMAL(4, 0)
+    equipped BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS Product (
