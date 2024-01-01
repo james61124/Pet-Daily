@@ -274,9 +274,10 @@ def UpdateUserProductPosition(request):
                 cursor.execute("SELECT zIndex FROM UserProduct WHERE userid = %s", [userID])
                 user_product = cursor.fetchall()
             max_zIndex = -1
-            for zIndex in user_product:
-                if zIndex > max_zIndex:
-                    max_zIndex = zIndex
+            for z_index in user_product:
+                z_index = z_index[0]
+                if z_index > max_zIndex:
+                    max_zIndex = z_index
             zIndex = max_zIndex + 1
 
         with connection.cursor() as cursor:
