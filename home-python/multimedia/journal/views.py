@@ -552,11 +552,12 @@ def upload_diary(request):
             medical_record = data.get('medical_record')
 
             # check if those value is decimal
-            # if weight is not None and weight.isnumeric():
-            #     pass
-            # else:
-            #     weight = None
-
+            if not (type(weight) == int or float):
+                weight = 0
+            if not (type(water_intake) == int or float):
+                water_intake = 0
+            if not (type(food_intake) == int or float):
+                food_intake = 0
             # if water_intake is not None and water_intake.isnumeric():
             #     pass
             # else:
