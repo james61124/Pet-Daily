@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbid
 from rest_framework_jwt.settings import api_settings
 from .models import User, UserProduct, Pet, Product, Diary, IotWaterIntake # add more data
 from django.db import connection
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import base64 
 import io 
@@ -16,11 +16,16 @@ def FoodIntake(request):
         
         data = json.loads(request.body)
         FoodIntake = data.get('FoodIntake')
-        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO IotFoodIntake (date, food_intake) VALUES (%s, %s)", [current_date, FoodIntake])
-        
+        current_date = datetime.now()
+        new_date = current_date + timedelta(hours=8)
+        formatted_date = new_date.strftime('%Y-%m-%d %H:%M:%S')
+        current_date = formatted_date
+
+        if FoodIntake is not None:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO IotFoodIntake (date, food_intake) VALUES (%s, %s)", [current_date, FoodIntake])
+
         with connection.cursor() as cursor:
             cursor.execute("SELECT date, food_intake FROM IotFoodIntake")
             total_food_intake = cursor.fetchall()
@@ -36,10 +41,14 @@ def WaterIntake(request):
 
         data = json.loads(request.body)
         water_intake = data.get('WaterIntake')
-        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        current_date = datetime.now()
+        new_date = current_date + timedelta(hours=8)
+        formatted_date = new_date.strftime('%Y-%m-%d %H:%M:%S')
+        current_date = formatted_date
 
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO IotWaterIntake (date, water_intake) VALUES (%s, %s)", [current_date, water_intake])
+        if water_intake is not None:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO IotWaterIntake (date, water_intake) VALUES (%s, %s)", [current_date, water_intake])
         
         with connection.cursor() as cursor:
             cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
@@ -57,10 +66,14 @@ def Weight(request):
 
         data = json.loads(request.body)
         weight = data.get('Weight')
-        current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        current_date = datetime.now()
+        new_date = current_date + timedelta(hours=8)
+        formatted_date = new_date.strftime('%Y-%m-%d %H:%M:%S')
+        current_date = formatted_date
 
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO IotWeight (date, weight) VALUES (%s, %s)", [current_date, weight])
+        if weight is not None:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO IotWeight (date, weight) VALUES (%s, %s)", [current_date, weight])
         
         with connection.cursor() as cursor:
             cursor.execute("SELECT date, weight FROM IotWeight")
@@ -654,13 +667,28 @@ def get_diary_info(request):
                     Abnormality = abnormality
                     MedicalRecord = medical_record
             
-            # with connection.cursor() as cursor:
-            #     cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
-            #     total_water_intake = cursor.fetchall()
-            # total_water_intake_list = [(date, water_intake) for date, water_intake in total_water_intake]
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
+                total_water_intake = cursor.fetchall()
+            total_water_intake_list = [(date, water_intake) for date, water_intake in total_water_intake]
+            if len(total_water_intake_list) > 0:
+                WaterIntake = total_water_intake_list[-1][1]
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT date, food_intake FROM IotFoodIntake")
+                total_food_intake = cursor.fetchall()
+            total_food_intake_list = [(date, food_intake) for date, food_intake in total_food_intake]
+            if len(total_food_intake_list) > 0:
+                FoodIntake = total_food_intake_list[-1][1]
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT date, weight FROM IotWeight")
+                total_weight = cursor.fetchall()
+            total_weight_list = [(date, weight) for date, weight in total_weight]
+            if len(total_weight_list) > 0:
+                Weight = total_weight_list[-1][1]
 
             # get which product user has and where it puts
-
             with connection.cursor() as cursor:
                 cursor.execute("SELECT productid, posX, posY, width, height, zIndex, equipped FROM UserProduct WHERE userid = %s", [userID])
                 user_product = cursor.fetchall()
@@ -693,6 +721,13 @@ def get_diary_info(request):
                         "equipped": equipped
                     }
                     dress_up_product_list.append(dress_up_product)
+
+            if WaterIntake is not None:
+                WaterIntake = int(WaterIntake)
+            if FoodIntake is not None:
+                FoodIntake = int(FoodIntake)
+            if Weight is not None:
+                Weight = int(Weight)
 
             response_data = {
                 "petid": petid,
