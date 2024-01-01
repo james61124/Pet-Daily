@@ -60,9 +60,9 @@ class Diary(models.Model):
     content = models.TextField()
     place = models.CharField(max_length=120)
     mood = models.CharField(max_length=10, choices=Mood.choices)
-    weight = models.DecimalField(max_digits = 6, decimal_places= 3) #kg 
-    water_intake = models.DecimalField(max_digits = 4, decimal_places= 0) #ml 
-    food_intake = models.DecimalField(max_digits = 5, decimal_places= 3) #kg
+    weight = models.DecimalField(max_digits = 15, decimal_places= 7) #kg 
+    water_intake = models.DecimalField(max_digits = 15, decimal_places= 7) #ml 
+    food_intake = models.DecimalField(max_digits = 15, decimal_places= 7) #kg
     defecation = models.CharField(max_length=20, choices=Defecation.choices)
     abnormality =  models.TextField()
     medical_record =  models.TextField()

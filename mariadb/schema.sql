@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS Diary (
     content TEXT,
     place VARCHAR(120),
     mood VARCHAR(10),
-    weight DECIMAL(6, 3),
-    water_intake DECIMAL(4, 0),
-    food_intake DECIMAL(5, 3),
+    weight DECIMAL(15, 7),
+    water_intake DECIMAL(15, 7),
+    food_intake DECIMAL(15, 7),
     defecation VARCHAR(20),
     abnormality TEXT,
     medical_record TEXT
