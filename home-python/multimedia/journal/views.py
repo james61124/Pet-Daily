@@ -112,13 +112,13 @@ def GetDressPageInfo(request):
 
                 dress_up_product = {
                     "Image": Image,
-                    "posX": str(posX),
-                    "posY": str(posY),
-                    "width": str(width),
-                    "height": str(height),
+                    "posX": int(posX),
+                    "posY": int(posY),
+                    "width": int(width),
+                    "height": int(height),
                     "productid": productid,
                     "type": Type,
-                    "zIndex": str(zIndex),
+                    "zIndex": int(zIndex),
                     "equipped": equipped
                 }
                 dress_up_product_list.append(dress_up_product)
@@ -145,7 +145,7 @@ def GetDressPageInfo(request):
 
             shop_product = {
                 "productid": productid,
-                "price": str(price),
+                "price": int(price),
                 "image": image,
                 "bought": bought,
                 "equipped": Equipped
@@ -410,6 +410,9 @@ def register(request):
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO User (userid, username, password, money) VALUES (%s, %s, %s, %s)", [userID, username, password, money])
             cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age, image) VALUES (%s, %s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age, image])
+
+        # with connection.cursor() as cursor:
+        #     cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
         
         response_data = {
             "userID" : userID,

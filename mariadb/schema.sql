@@ -35,10 +35,10 @@ CREATE TABLE IF NOT EXISTS UserProduct (
     userid VARCHAR(60) NOT NULL,
     productid VARCHAR(60) NOT NULL,
     description VARCHAR(10),
-    posX DECIMAL(4, 0),
-    posY DECIMAL(4, 0),
-    width DECIMAL(4, 0),
-    height DECIMAL(4, 0),
+    posX DECIMAL(4, 0) DEFAULT 50,
+    posY DECIMAL(4, 0) DEFAULT 50,
+    width DECIMAL(4, 0) DEFAULT 100,
+    height DECIMAL(4, 0) DEFAULT 100,
     zIndex DECIMAL(4, 0) DEFAULT 0,
     equipped BOOLEAN DEFAULT FALSE
 );
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     productid VARCHAR(60) NOT NULL,
     name VARCHAR(36),
-    price DECIMAL(5, 0),
+    price DECIMAL(5, 0) DEFAULT 10,
     image VARCHAR(100),
     product_type VARCHAR(100)
 );

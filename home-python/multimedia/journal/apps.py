@@ -9,7 +9,7 @@ class JournalConfig(AppConfig):
 
     def ready(self):
 
-        shop_type_list = ['Cristmas', 'Helloween', 'Home', 'NewYear', 'Others']
+        shop_type_list = ['Cristmas', 'Helloween', 'Home', 'NewYear', 'Others', 'Background']
         for shop_type in shop_type_list:
             directory = f"/home/multimedia/journal/image/shop/{shop_type}"
             for filename in os.listdir(directory):
@@ -28,23 +28,3 @@ class JournalConfig(AppConfig):
                         with connection.cursor() as cursor:
                             cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [productid, name, price, image, product_type])
                 
-        
-        # directory = "/home/multimedia/journal/image/shop/christmas"
-        # for filename in os.listdir(directory):
-        #     if os.path.isfile(os.path.join(directory, filename)):
-        #         image = "http://107.191.60.115:81/image/shop/christmas/" + filename
-        #         productid = filename
-        #         name = filename
-        #         price = 10
-        #         product_type = "christmas"
-
-        #         # Check if filename already exists in the Product table
-        #         with connection.cursor() as cursor:
-        #             cursor.execute("SELECT COUNT(*) FROM Product WHERE productid = %s", [productid])
-        #             count = cursor.fetchone()[0]
-
-        #         # If the count is 0, the filename does not exist, so insert it
-        #         if count == 0:
-        #             with connection.cursor() as cursor:
-        #                 cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [productid, name, price, image, product_type])
-            
