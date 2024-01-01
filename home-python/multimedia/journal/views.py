@@ -286,12 +286,12 @@ def login(request):
             cursor.execute("SELECT userid FROM User WHERE username = %s AND password = %s", [username, password])
             user_data = cursor.fetchone()
         
-        all_user_data = [userid for userid in user_data]
-        UserID = 0
-        for userid in all_user_data:
-            UserID = userid
-        
         if user_data:
+            all_user_data = [userid for userid in user_data]
+            UserID = 0
+            for userid in all_user_data:
+                UserID = userid
+
             with connection.cursor() as cursor:
                 cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
                 pet_data = cursor.fetchone()
