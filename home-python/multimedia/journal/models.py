@@ -31,6 +31,7 @@ class Pet(models.Model):
     gender = models.CharField(max_length=10, choices=Gender.choices)
     age = models.DecimalField(max_digits = 3, decimal_places= 0)
     weight = models.DecimalField(max_digits = 5, decimal_places= 1)
+    image = models.CharField(max_length=100, default='')
 
 class Product(models.Model):
     class ProductType(models.TextChoices):

@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin', admin.site.urls),
     path('User/Register', views.register),
     path('User/Login', views.login),
+    path('User/GetPetImage', views.GetPetImage),
+
     path('get_all_user', views.get_all_user),
     path('delete_user', views.delete_user), 
 

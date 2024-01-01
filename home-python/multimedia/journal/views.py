@@ -148,7 +148,7 @@ def GetDressPageInfo(request):
                 "price": str(price),
                 "image": image,
                 "bought": bought,
-                "Equipped": Equipped
+                "equipped": Equipped
             }
             if product_type in all_shop_product_dict:
                 all_shop_product_dict[product_type].append(shop_product)
@@ -371,6 +371,7 @@ def register(request):
         petName = data.get('petName')
         age = data.get('age')
         gender = data.get('gender')
+        image = data.get('image')
 
         credentials = f"{username}_{password}"
         pet_credentials = f"{username}_{petName}"
@@ -396,11 +397,35 @@ def register(request):
         
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO User (userid, username, password, money) VALUES (%s, %s, %s, %s)", [userID, username, password, money])
-            cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age) VALUES (%s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age])
+            cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age, image) VALUES (%s, %s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age, image])
         
         response_data = {
             "userID" : userID,
             "petID" : petid
+        }
+
+        response_data = json.dumps(response_data)
+
+        return HttpResponse(response_data)
+    else:
+        return HttpResponseBadRequest()
+
+def GetPetImage(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        PetType = data.get('PetType')
+
+        image_list = []
+
+        directory = "/home/multimedia/journal/image/pet/" + PetType
+        for filename in os.listdir(directory):
+            if os.path.isfile(os.path.join(directory, filename)):
+                image = "http://107.191.60.115:81/image/pet/" + PetType + '/' + filename
+                image_list.append(image)
+
+        response_data = {
+            "image" : image_list
         }
 
         response_data = json.dumps(response_data)

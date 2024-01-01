@@ -60,6 +60,31 @@ data:
 }
 ```
 
+### /User/GetPetImage *POST* 
+**request** 
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	PetType : “”
+}
+```
+
+**response**
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+data:
+{
+	"image" : ["uri1", "uri2", ...]
+}
+```
+
 
 ## dress up page
 

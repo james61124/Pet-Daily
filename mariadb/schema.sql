@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS Pet (
     breed VARCHAR(10),
     gender VARCHAR(10),
     age DECIMAL(3, 0),
-    weight DECIMAL(5, 1)
+    weight DECIMAL(5, 1),
+    image VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS UserProduct (

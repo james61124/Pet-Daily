@@ -4,12 +4,13 @@ import json
 url = "http://localhost:8000/User/Register"
 
 data = {
-    'username': 'username',
+    'username': 'usernametest',
     'password': 'password',
     'breed': 'dog',
     'petName': 'testpet',
     'age': 10,
-    'gender': 'haha'
+    'gender': 'haha',
+    'image': 'http://107.191.60.115:81/image/pet/Rabbit/Rabbitt02.png'
 }
 
 headers = {
