@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Pet (
 CREATE TABLE IF NOT EXISTS UserProduct (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userid VARCHAR(60) NOT NULL,
-    productid VARCHAR(60) NOT NULL,
+    productid VARCHAR(400) NOT NULL,
     description VARCHAR(10),
     posX DECIMAL(4, 0) DEFAULT 50,
     posY DECIMAL(4, 0) DEFAULT 50,
@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS UserProduct (
 
 CREATE TABLE IF NOT EXISTS Product (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    productid VARCHAR(60) NOT NULL,
-    name VARCHAR(36),
+    productid VARCHAR(400) NOT NULL,
+    name VARCHAR(400),
     price DECIMAL(5, 0) DEFAULT 10,
     image VARCHAR(100),
     product_type VARCHAR(100)

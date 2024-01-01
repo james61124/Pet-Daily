@@ -411,8 +411,10 @@ def register(request):
             cursor.execute("INSERT INTO User (userid, username, password, money) VALUES (%s, %s, %s, %s)", [userID, username, password, money])
             cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age, image) VALUES (%s, %s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age, image])
 
-        # with connection.cursor() as cursor:
-        #     cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [f"{userID}_{image}", image, 10, image, "Pet"])
+            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [1, True, userID, "bg_1.png"])
+            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [2, True, userID, f"{userID}_{image}"])
         
         response_data = {
             "userID" : userID,
@@ -585,6 +587,7 @@ def get_diary_info(request):
 
             date = data.get('date')
             petid = data.get('petid')
+            userID = data.get('userid')
 
             # convert date format
             try:
@@ -627,6 +630,41 @@ def get_diary_info(request):
             #     total_water_intake = cursor.fetchall()
             # total_water_intake_list = [(date, water_intake) for date, water_intake in total_water_intake]
 
+            # get which product user has and where it puts
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT productid, posX, posY, width, height, zIndex, equipped FROM UserProduct WHERE userid = %s", [userID])
+                user_product = cursor.fetchall()
+            
+            dress_up_product_list = []
+            if user_product is not None:
+                for productid, posX, posY, width, height, zIndex, equipped in user_product:
+                    query = f"SELECT image, product_type FROM Product WHERE productid = %s"
+                    product_info = ""
+                    with connection.cursor() as cursor:
+                        cursor.execute(query, [productid])
+                        product_info = cursor.fetchall()
+                    
+                    Image = ""
+                    Type = ""
+                    if product_info:
+                        for image, product_type in product_info:
+                            Image = image
+                            Type = product_type
+
+                    dress_up_product = {
+                        "Image": Image,
+                        "posX": int(posX),
+                        "posY": int(posY),
+                        "width": int(width),
+                        "height": int(height),
+                        "productid": productid,
+                        "type": Type,
+                        "zIndex": int(zIndex),
+                        "equipped": equipped
+                    }
+                    dress_up_product_list.append(dress_up_product)
+
             response_data = {
                 "petid": petid,
                 "date": date,
@@ -639,7 +677,8 @@ def get_diary_info(request):
                 "food_intake": FoodIntake,
                 "defecation": Defecation,
                 "abnormality": Abnormality,
-                "medical_record": MedicalRecord
+                "medical_record": MedicalRecord,
+                "DressUpProduct": dress_up_product_list
             }
 
             return HttpResponse(json.dumps(response_data), content_type='application/json')

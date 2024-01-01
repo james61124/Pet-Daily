@@ -10,7 +10,7 @@ class User(models.Model):
 
 class UserProduct(models.Model):
     userid = models.CharField(max_length=60)
-    productid = models.CharField(max_length=60)
+    productid = models.CharField(max_length=400)
     description = models.CharField(max_length=10)
     posX = models.DecimalField(max_digits = 4, decimal_places= 0, default=50)
     posY = models.DecimalField(max_digits = 4, decimal_places= 0, default=50)
@@ -38,8 +38,8 @@ class Product(models.Model):
         HAT = 'Hat', 'Hat'
         CLOTHES = 'Clothes', 'Clothes'
         BACKGROUND = 'Background', 'Background'
-    productid =  models.CharField(max_length=60)
-    name =  models.CharField(max_length=36)
+    productid =  models.CharField(max_length=400)
+    name =  models.CharField(max_length=400)
     price = models.DecimalField(max_digits = 5, decimal_places= 0)
     image = models.CharField(max_length=100)
     product_type = models.CharField(max_length=100, choices=ProductType.choices)

@@ -331,6 +331,7 @@ header:
 }
 data:
 {
+	"userid" : ,
 	"petid" : ,
 	"date" : 
 }
@@ -356,7 +357,18 @@ data:
 	"food_intake" : ,
 	"defecation" : ,
 	"abnormality" : ,
-	"medical_record" :
+	"medical_record" : ,
+	"DressUpProduct": [{
+		"Image": "",
+		"posX": "",
+		"posY": "",
+		"width": "",
+		"height": "",
+		"productid": "",
+		"type": "",
+		"zIndex": 0,
+		"equipped": boolean
+	}, ...]
 }
 ```
 
