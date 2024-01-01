@@ -293,8 +293,8 @@ def login(request):
         
         if user_data:
             with connection.cursor() as cursor:
-            cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
-            pet_data = cursor.fetchone()
+                cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
+                pet_data = cursor.fetchone()
         
             all_pet_data = [petid for petid in pet_data]
             petID = 0
