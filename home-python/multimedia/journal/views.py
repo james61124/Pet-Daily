@@ -250,21 +250,21 @@ def UpdateUserProductPosition(request):
         # check if user exists
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM User WHERE userid = %s", [userID])
-            user_info = cursor.fetchone()
+            user_info = cursor.fetchall()
         if user_info is None:
             return HttpResponseBadRequest('User doesn\'t exist')
         
         # check if product exist
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM Product WHERE productid = %s", [productID])
-            product = cursor.fetchone()
+            product = cursor.fetchall()
         if product is None:
             return HttpResponseBadRequest('Product doesn\'t exist')
 
         # check if this product user has bought
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM UserProduct WHERE userid = %s AND productid = %s", [userID, productID])
-            user_product = cursor.fetchone()
+            user_product = cursor.fetchall()
         if user_product is None:
             return HttpResponseBadRequest('User hasn\'t bought this product')
         
@@ -272,7 +272,7 @@ def UpdateUserProductPosition(request):
         if zIndex == -1:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT zIndex FROM UserProduct WHERE userid = %s", [userID])
-                user_product = cursor.fetchone()
+                user_product = cursor.fetchall()
             max_zIndex = -1
             for zIndex in user_product:
                 if zIndex > max_zIndex:
