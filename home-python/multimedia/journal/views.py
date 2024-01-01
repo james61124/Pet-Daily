@@ -553,20 +553,11 @@ def upload_diary(request):
 
             # check if those value is decimal
             if not (type(weight) == int or float):
-                weight = None
+                weight = 0
             if not (type(water_intake) == int or float):
-                water_intake = None
+                water_intake = 0
             if not (type(food_intake) == int or float):
-                food_intake = None
-            # if water_intake is not None and water_intake.isnumeric():
-            #     pass
-            # else:
-            #     water_intake = None
-
-            # if food_intake is not None and food_intake.isnumeric():
-            #     pass
-            # else:
-            #     food_intake = None
+                food_intake = 0
 
             # convert date format
             try:
@@ -701,9 +692,9 @@ def get_diary_info(request):
                     Content = content
                     Place = place
                     Mood = mood
-                    Weight = str(weight)
-                    WaterIntake = str(water_intake)
-                    FoodIntake = str(food_intake)
+                    Weight = weight
+                    WaterIntake = water_intake
+                    FoodIntake = food_intake
                     Defecation = defecation
                     Abnormality = abnormality
                     MedicalRecord = medical_record
