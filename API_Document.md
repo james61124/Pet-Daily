@@ -100,7 +100,8 @@ data:
 		"height": "",
 		"productid": "",
 		"type": "",
-		"zIndex": 0
+		"zIndex": 0,
+		"equipped": boolean
 	}, ...]
 	"ShopProduct": ["type": [{
 		"productid": "blue_hat.png",
@@ -142,7 +143,7 @@ header:
 data: 
 {
 	"userid": "userid",
-	"money": "1000",
+	"money": 1000,
 	"productid": "productid"
 }
 ```
@@ -178,7 +179,35 @@ header:
 ```
 data: 
 {
+}
+```
 
+### /Dressup/UpdateProductStatus *POST*
+> 
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data:
+{
+	'userID': user_id,
+    'petID': pet_id,
+    'productID': product_id,
+	'Equipped': boolean
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+```
+data: 
+{
 }
 ```
 
