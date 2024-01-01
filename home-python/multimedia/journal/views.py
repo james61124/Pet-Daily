@@ -353,8 +353,16 @@ def Multi_UpdateUserProductPosition(request):
             return HttpResponseBadRequest('User doesn\'t exist')
 
         products = data.get('products')
-        for product in products:
-            _updateUserProductPosition(product)
+        results = []
+
+        for idx, product in enumerate(products):
+            results.append(_updateUserProductPosition(data, userID, petID))
+
+        for result in results:
+            if result[0] == 'error':
+                HttpResponseBadRequest(result[1])
+        
+        HttpResponse()
     else:
         return HttpResponseBadRequest()
     pass
