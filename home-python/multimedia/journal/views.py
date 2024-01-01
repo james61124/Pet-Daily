@@ -412,9 +412,10 @@ def register(request):
             cursor.execute("INSERT INTO Pet (userid, petid, name, breed, gender, age, image) VALUES (%s, %s, %s, %s, %s, %s, %s)", [userID, petid, petName, breed, gender, age, image])
 
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [f"{userID}_{image}", image, 10, image, "Pet"])
+            user_product_id = f"{userID}_{image}"
+            cursor.execute("INSERT INTO Product (productid, name, price, image, product_type) VALUES (%s, %s, %s, %s, %s)", [user_product_id, image, 10, image, "Pet"])
             cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [1, True, userID, "bg_1.png"])
-            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [2, True, userID, f"{userID}_{image}"])
+            cursor.execute("INSERT INTO UserProduct (zIndex, equipped, userid, productid) VALUES (%s, %s, %s, %s)", [2, True, userID, user_product_id])
         
         response_data = {
             "userID" : userID,
