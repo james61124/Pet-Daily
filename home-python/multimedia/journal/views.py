@@ -512,20 +512,20 @@ def upload_diary(request):
             medical_record = data.get('medical_record')
 
             # check if those value is decimal
-            if weight is not None and weight.isnumeric():
-                pass
-            else:
-                weight = None
+            # if weight is not None and weight.isnumeric():
+            #     pass
+            # else:
+            #     weight = None
 
-            if water_intake is not None and water_intake.isnumeric():
-                pass
-            else:
-                water_intake = None
+            # if water_intake is not None and water_intake.isnumeric():
+            #     pass
+            # else:
+            #     water_intake = None
 
-            if food_intake is not None and food_intake.isnumeric():
-                pass
-            else:
-                food_intake = None
+            # if food_intake is not None and food_intake.isnumeric():
+            #     pass
+            # else:
+            #     food_intake = None
 
             # convert date format
             try:
