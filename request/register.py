@@ -7,9 +7,10 @@ data = {
     'username': 'username',
     'password': 'password',
     'breed': 'breed',
-    'petName': 'petName',
+    'petName': 'testpet',
     'age': 10,
-    'gender': 'gender'
+    'gender': 'gender',
+    'image': 'http://107.191.60.115:81/image/pet/Rabbit/Rabbitt02.png'
 }
 
 headers = {

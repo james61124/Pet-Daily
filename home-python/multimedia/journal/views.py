@@ -282,8 +282,34 @@ def UpdateUserProductPosition(request):
                     max_zIndex = z_index
             zIndex = max_zIndex + 1
 
+        # with connection.cursor() as cursor:
+        #     cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
+
+        update_query = "UPDATE UserProduct SET "
+        params = []
+
+        if posX is not None:
+            update_query += "posX = %s, "
+            params.append(posX)
+        if posY is not None:
+            update_query += "posY = %s, "
+            params.append(posY)
+        if width is not None:
+            update_query += "width = %s, "
+            params.append(width)
+        if height is not None:
+            update_query += "height = %s, "
+            params.append(height)
+        if zIndex is not None:
+            update_query += "zIndex = %s, "
+            params.append(zIndex)
+
+        # Add the common parameters
+        update_query += "equipped = %s WHERE userid = %s AND productid = %s"
+        params.extend([True, userID, productID])
+
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
+            cursor.execute(update_query, params)
                 
         return HttpResponse()
 
