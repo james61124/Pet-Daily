@@ -248,6 +248,7 @@ def Buy(request):
         return HttpResponseBadRequest()
 
 def _updateUserProductPosition(data, userID, petID):
+    print(data)
     
     productID = data.get('productID')
     posX = data.get('posX')
@@ -257,8 +258,6 @@ def _updateUserProductPosition(data, userID, petID):
     height = data.get('height')
     type_ = data.get('type')
     zIndex = data.get('zIndex')
-
-    
 
     # check if product exist
     with connection.cursor() as cursor:
@@ -308,14 +307,12 @@ def _updateUserProductPosition(data, userID, petID):
         update_query += "zIndex = %s, "
         params.append(zIndex)
     
-    
-
     # Add the common parameters
     update_query += "equipped = %s WHERE userid = %s AND productid = %s"
     params.extend([True, userID, productID])
 
     print(update_query)
-    print(userID, productID)
+    print(params)
 
     with connection.cursor() as cursor:
         cursor.execute(update_query, params)
@@ -780,8 +777,7 @@ def get_diary_info(request):
                 "food_intake": FoodIntake,
                 "defecation": Defecation,
                 "abnormality": Abnormality,
-                "medical_record": MedicalRecord,
-                "DressUpProduct": dress_up_product_list
+                "medical_record": MedicalRecord
             }
 
             return HttpResponse(json.dumps(response_data), content_type='application/json')
