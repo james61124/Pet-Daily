@@ -505,6 +505,13 @@ def get_diary_info(request):
             date = data.get('date')
             petid = data.get('petid')
 
+            # convert date format
+            try:
+                parsed_date = datetime.strptime(date, '%m/%d/%Y')
+                date = parsed_date.strftime('%Y-%m-%d')
+            except ValueError:
+                pass
+
             with connection.cursor() as cursor:
                 cursor.execute("SELECT image, content, place, mood, weight, water_intake, food_intake, defecation, abnormality, medical_record FROM Diary WHERE petid = %s AND date = %s", [petid, date])
                 diary_info = cursor.fetchall()
