@@ -553,11 +553,11 @@ def upload_diary(request):
 
             # check if those value is decimal
             if not (type(weight) == int or float):
-                weight = 0
+                weight = None
             if not (type(water_intake) == int or float):
-                water_intake = 0
+                water_intake = None
             if not (type(food_intake) == int or float):
-                food_intake = 0
+                food_intake = None
             # if water_intake is not None and water_intake.isnumeric():
             #     pass
             # else:
