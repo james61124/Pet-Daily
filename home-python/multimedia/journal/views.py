@@ -353,6 +353,9 @@ def Multi_UpdateUserProductPosition(request):
             return HttpResponseBadRequest('User doesn\'t exist')
 
         products = data.get('products')
+        if !isinstance(products, list):
+            return HttpResponseBadRequest('products have to be an list')
+        
         results = []
 
         for idx, product in enumerate(products):
@@ -360,9 +363,9 @@ def Multi_UpdateUserProductPosition(request):
 
         for result in results:
             if result[0] == 'error':
-                HttpResponseBadRequest(result[1])
+                return HttpResponseBadRequest(result[1])
         
-        HttpResponse()
+        return HttpResponse()
     else:
         return HttpResponseBadRequest()
     pass
