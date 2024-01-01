@@ -358,7 +358,7 @@ def Multi_UpdateUserProductPosition(request):
         results = []
 
         for idx, product in enumerate(products):
-            results.append(_updateUserProductPosition(data, userID, petID))
+            results.append(_updateUserProductPosition(product, userID, petID))
 
         for result in results:
             if result[0] == 'error':
