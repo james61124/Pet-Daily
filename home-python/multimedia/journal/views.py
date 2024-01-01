@@ -286,21 +286,21 @@ def login(request):
             cursor.execute("SELECT userid FROM User WHERE username = %s AND password = %s", [username, password])
             user_data = cursor.fetchone()
         
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
-            pet_data = cursor.fetchone()
-        
         all_user_data = [userid for userid in user_data]
         UserID = 0
         for userid in all_user_data:
             UserID = userid
         
-        all_pet_data = [petid for petid in pet_data]
-        petID = 0
-        for petid in all_pet_data:
-            petID = petid
-
         if user_data:
+            with connection.cursor() as cursor:
+            cursor.execute("SELECT petid FROM Pet WHERE userid = %s", [user_data[0]])
+            pet_data = cursor.fetchone()
+        
+            all_pet_data = [petid for petid in pet_data]
+            petID = 0
+            for petid in all_pet_data:
+                petID = petid
+
             if pet_data:
                 response_data = {
                     "userID" : UserID,
@@ -316,7 +316,7 @@ def login(request):
                 response_data = json.dumps(response_data)
                 return HttpResponse(response_data)
         else:
-            return HttpResponseBadRequest("Username or password is incorrect.")
+            return HttpResponse("Username or password is incorrect.")
     else:
         return HttpResponseBadRequest()
 
