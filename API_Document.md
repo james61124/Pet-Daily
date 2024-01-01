@@ -17,6 +17,7 @@ data:
 	"petName" : “”,
 	"age" : “”,
 	"gender" : “”,
+	"image": ""
 }
 ```
 
