@@ -315,7 +315,6 @@ def _updateUserProductPosition(data, userID, petID):
             
     return ('success','')
 
-
 def UpdateUserProductPosition(request):
     if request.method == 'POST':
 
@@ -332,9 +331,9 @@ def UpdateUserProductPosition(request):
 
         result = _updateUserProductPosition(data, userID, petID)
         if result[0] == 'success':
-            HttpResponse()
+            return HttpResponse()
         else:
-            HttpResponseBadRequest(result[1])
+            return HttpResponseBadRequest(result[1])
     else:
         return HttpResponseBadRequest()
 
