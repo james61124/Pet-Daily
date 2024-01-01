@@ -267,6 +267,17 @@ def UpdateUserProductPosition(request):
             user_product = cursor.fetchone()
         if user_product is None:
             return HttpResponseBadRequest('User hasn\'t bought this product')
+        
+        # update zindex
+        if zIndex == -1:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT zIndex FROM UserProduct WHERE userid = %s", [userID])
+                user_product = cursor.fetchone()
+            max_zIndex = -1
+            for zIndex in user_product:
+                if zIndex > max_zIndex:
+                    max_zIndex = zIndex
+            zIndex = max_zIndex + 1
 
         with connection.cursor() as cursor:
             cursor.execute("UPDATE UserProduct SET posX = %s, posY = %s, width = %s, height = %s, zIndex = %s, equipped = %s WHERE userid = %s AND productid = %s", [posX, posY, width, height, zIndex, True, userID, productID])
