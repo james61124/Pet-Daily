@@ -353,7 +353,7 @@ def Multi_UpdateUserProductPosition(request):
             return HttpResponseBadRequest('User doesn\'t exist')
 
         products = data.get('products')
-        if !isinstance(products, list):
+        if not isinstance(products, list):
             return HttpResponseBadRequest('products have to be an list')
         
         results = []
