@@ -892,9 +892,65 @@ def GetMainPageDateInfo(request):
     else:
         return HttpResponseBadRequest()
 
+### DashBoard
+def GetWeight(request):
+    if request.method == 'POST':
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, weight FROM IotWeight")
+            total_weight = cursor.fetchall()
+        
+        total_weight_list = [{ "date": date.strftime('%Y-%m-%d %H:%M:%S'), "value": int(weight)} for date, weight in total_weight][-10:]
 
+        response_data = {
+            "weight": total_weight_list
+        }
 
+        response_data = json.dumps(response_data)
 
+        return HttpResponse(response_data)
+
+    else:
+        return HttpResponseBadRequest()
+
+def GetWaterIntake(request):
+    if request.method == 'POST':
+        
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, water_intake FROM IotWaterIntake")
+            total_water_intake = cursor.fetchall()
+        
+        total_water_intake_list = [{ "date": date.strftime('%Y-%m-%d %H:%M:%S'), "value": int(water_intake)} for date, water_intake in total_water_intake][-10:]
+
+        response_data = {
+            "water_intake": total_water_intake_list
+        }
+
+        response_data = json.dumps(response_data)
+
+        return HttpResponse(response_data)
+
+    else:
+        return HttpResponseBadRequest()
+
+def GetFoodIntake(request):
+    if request.method == 'POST':
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT date, food_intake FROM IotFoodIntake")
+            total_food_intake = cursor.fetchall()
+
+        total_food_intake_list = [{ "date": date.strftime('%Y-%m-%d %H:%M:%S'), "value": int(food_intake)} for date, food_intake in total_food_intake][-10:]
+
+        response_data = {
+            "food_intake": total_food_intake_list
+        }
+
+        response_data = json.dumps(response_data)
+
+        return HttpResponse(response_data)
+    else:
+        return HttpResponseBadRequest()
 
 
 #################################################################################################

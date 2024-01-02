@@ -47,6 +47,10 @@ urlpatterns = [
     path('Iot/WaterIntake', views.WaterIntake),
     path('Iot/FoodIntake', views.FoodIntake),
     path('Iot/Weight', views.Weight),
+
+    path('DashBoard/GetWaterIntake', views.GetWaterIntake),
+    path('DashBoard/GetFoodIntake', views.GetFoodIntake),
+    path('DashBoard/GetWeight', views.GetWeight)
 ]
 
 urlpatterns += static(settings.IMAGE_URL, document_root=settings.IMAGE_ROOT)

@@ -435,6 +435,81 @@ data:
 }
 ```
 
+## dashboard page
+### /DashBoard/GetWeight *POST*
+> 
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data: 
+{
+	"weight": [ {
+			"date" : "2024-01-01 18:29:09",
+			"value" : 90
+		}, ...	
+	]
+}
+```
+
+### /DashBoard/GetFoodIntake *POST*
+> 
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data: 
+{
+	"food_intake": [ {
+			"date" : "2024-01-01 18:29:09",
+			"value" : 90
+		}, ...	
+	]
+}
+```
+
+### /DashBoard/GetWaterIntake *POST*
+> 
+**request**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+```
+**response**
+```
+header:
+{ 
+	"content_type" : 'application/json'
+}
+data: 
+{
+	"water_intake": [ {
+			"date" : "2024-01-01 18:29:09",
+			"value" : 90
+		}, ...	
+	]
+}
+```
 
 # Database 
 ## User
